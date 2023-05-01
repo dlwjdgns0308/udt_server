@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post("/list/main",async (req, res) => {
-    const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at FROM category");
+    const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,like FROM category");
     
     res.send(rows);
 });
