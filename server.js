@@ -40,7 +40,7 @@ app.get("/content", async (req, res) => {
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value, creator, created_at FROM content WHERE category=? ",[req.query.id]);
     const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit FROM category WHERE category=? ",[req.query.id]);
     
-    console.log(count[0][0])
+    console.log(count[0][0].cnt)
     res.send({content:rows,title:rows2,count});
   });
   
