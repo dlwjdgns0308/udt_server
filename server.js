@@ -48,7 +48,7 @@ app.get("/content", async (req, res) => {
   
   
   app.get('/image', (req, res) => {
-    res.sendFile("C:/Users/이정훈/Desktop/updt/public/bg.png");
+    res.sendFile("./source/game/1.png");
   });
   
 app.get("/user/twitch", async (req, res) => {
