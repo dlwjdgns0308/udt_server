@@ -48,7 +48,7 @@ app.get("/content", async (req, res) => {
   
   
   app.get('/image', (req, res) => {
-    res.sendFile("./source/game/1.png");
+    res.sendFile("/home/uduntu/source/game/1.png");
   });
   
 app.get("/user/twitch", async (req, res) => {
