@@ -36,7 +36,7 @@ app.use('/source', express.static('/home/ubuntu/source'))
 
 app.get("/content", async (req, res) => {
     console.log(req.query.id);
-    const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit FROM category WHERE category=? ",[req.query.id]);
+    const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,like FROM category WHERE category=? ",[req.query.id]);
 
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value, creator, created_at FROM content WHERE category=? ",[req.query.id]);
     
@@ -45,25 +45,8 @@ app.get("/content", async (req, res) => {
     res.send({content:rows,title:rows2});
   });
   
-  const imagePath = '/game/1.png'; // �씠誘몄�� �뙆�씪�쓽 �젅��� 寃쎈줈
 
 
-  
-  
-  app.get('/image', (req, res) => {
-    res.sendFile("/home/ubuntu/source/game/1.png");
-  });
-  
-app.get("/user/twitch", async (req, res) => {
-    console.log(req.query.id);
-    const [rows,fields] = await DB.query("SELECT  user_id, user_login,user_name,profile_image_url, view_count, created_at FROM twitch_user_list WHERE user_id = ? ORDER BY view_count DESC Limit 1",[req.query.id]);
-    const [rows2,fields2] = await DB.query("SELECT  user_id,user_name,created_at,creator_id,creator_name,run_time,video_url,thumbnail,title,view_count,game_id FROM t_clips WHERE user_id = ? ORDER BY view_count DESC Limit 5",[req.query.id]);   
-    const [rows3,fields3] = await DB.query("SELECT  user_id,user_login,user_name,title,created_at,url,thumbnail,view_count,run_time FROM t_videos WHERE user_id = ? ORDER BY created_at desc Limit 10",[req.query.id]);   
-    
-    console.log(rows);
-    
-    res.send({user:rows,clip:rows2,video:rows3});
-});
 
 app.get("/map", async (req, res) => {
     const [rows,fields] = await DB.query("SELECT  from_id,from_login,from_name,to_id,to_login,to_name,followed_at FROM t_relation");
