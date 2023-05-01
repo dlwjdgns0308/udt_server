@@ -37,10 +37,34 @@ app.use('/source', express.static('/home/ubuntu/source'))
 app.get("/content", async (req, res) => {
     console.log(req.query.id);
     const count =  await DB.query("SELECT COUNT(*) as cnt FROM content WHERE category=? ",[req.query.id]);
+    const cnt = count[0][0].cnt;
+    if (cnt > 0){
+        const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit FROM category WHERE category=? ",[req.query.id]);
+    }
+    else{
+        fs.readdir(`/source/${req.query.id}`, (err, files) => {
+            if (err) {
+              console.error(err);
+              return res.status(500).send('Internal Server Error');
+            }
+        
+            // 폴더 내부의 파일 목록 중 이미지 파일만 추출
+            const imageFiles = files.filter((file) => {
+              const extname = path.extname(file);
+              return extname === '.jpg' || extname === '.jpeg' || extname === '.png';
+            });
+        
+            // 각각의 이미지 파일에 대하여 res.sendFile() 메소드 호출
+            imageFiles.forEach((file) => {
+              const imagePath = path.join(imageDir, file);
+              res.sendFile(imagePath);
+            });
+          });
+    }
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value, creator, created_at FROM content WHERE category=? ",[req.query.id]);
-    const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit FROM category WHERE category=? ",[req.query.id]);
     
-    console.log(count[0][0].cnt)
+    
+    console.log(count)
     res.send({content:rows,title:rows2,count});
   });
   
