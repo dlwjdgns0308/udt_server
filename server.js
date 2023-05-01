@@ -36,11 +36,12 @@ app.use('/source', express.static('/home/ubuntu/source'))
 
 app.get("/content", async (req, res) => {
     console.log(req.query.id);
+    const count =  await DB.query("SELECT COUNT(*) as cnt FROM content WHERE category=? ",[req.query.id]);
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value, creator, created_at FROM content WHERE category=? ",[req.query.id]);
     const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit FROM category WHERE category=? ",[req.query.id]);
     
     console.log(rows)
-    res.send({content:rows,title:rows2});
+    res.send({content:rows,title:rows2,count});
   });
   
   const imagePath = '/game/1.png'; // �씠誘몄�� �뙆�씪�쓽 �젅��� 寃쎈줈
