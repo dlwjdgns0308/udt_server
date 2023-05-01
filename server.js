@@ -32,7 +32,7 @@ app.post("/list/main",async (req, res) => {
     res.send(rows);
 });
 
-app.use('/source', express.static('source'))
+app.use('/source', express.static('/home/ubuntu/source'))
 
 app.get("/content", async (req, res) => {
     console.log(req.query.id);
