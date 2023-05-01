@@ -32,7 +32,8 @@ app.post("/list/main",async (req, res) => {
     res.send(rows);
 });
 
-app.use(express.static('source'));
+app.use('/source', express.static('source'))
+
 app.get("/content", async (req, res) => {
     console.log(req.query.id);
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value, creator, created_at FROM content WHERE category=? ",[req.query.id]);
