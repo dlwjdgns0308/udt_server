@@ -33,6 +33,12 @@ app.get("/content", async (req, res) => {
 
     res.send({content:rows,title:rows2});
   });
+
+  // 업로드된 파일이 저장될 디렉토리 생성
+const uploadDir = '/home/ubuntu/source/test';
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
   
 // 업로드된 파일이 저장될 디렉토리 설정
 const storage = multer.diskStorage({
