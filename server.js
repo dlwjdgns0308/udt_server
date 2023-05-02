@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3001; // react�뜝�럩踰� �뼨轅명�∽옙沅싨뤆�룆占썬굩�삕�뜝占� 3000�뜝�럩逾졾뜝�럥鍮띸뭐癒뀁삕 3000�뜝�럩逾� �뜝�럥�닡�뜝�럥鍮� �뜝�럥�닡占쎈닱�뜝占� �뜝�럥�빢
+const port = 3001; 
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const DB = require("./db");
@@ -9,18 +9,6 @@ const fs = require('fs');
 
 
 
-app.get('/directory', (req, res) => {
-    const directoryPath = __dirname; // 현재 파일의 경로를 가져옵니다.
-    
-    fs.readdir(directoryPath, (err, files) => {
-      if (err) {
-        console.log('Error:', err);
-        return res.status(500).send('Internal server error');
-      }
-      
-      res.send(files);
-    });
-  });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -45,7 +33,16 @@ app.get("/content", async (req, res) => {
     res.send({content:rows,title:rows2});
   });
   
-
+app.post("/edit_content",async  (req, res) => {
+    // const user_name = req.body.name;
+    console.log(req.body)
+    // const [rows,fields] = await  DB.query("SELECT name FROM youtube_user_list WHERE name LIKE ?",[user_name + "%"]);
+    // let arr2 = [];
+    // rows.forEach((element) => {
+    //     arr2 = arr2.concat(element.name);
+    // });
+    // res.send(arr2);
+});
 
 
 app.get("/map", async (req, res) => {
