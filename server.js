@@ -54,9 +54,7 @@ app.post('/edit_content', upload.array('images'), (req, res) => {
   res.send('이미지 파일 업로드 완료');
 });
 
-app.listen(3001, () => {
-  console.log('Server is listening on port 3001');
-});
+
 
 app.get("/map", async (req, res) => {
     const [rows,fields] = await DB.query("SELECT  from_id,from_login,from_name,to_id,to_login,to_name,followed_at FROM t_relation");
