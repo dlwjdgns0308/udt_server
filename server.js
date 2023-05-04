@@ -75,7 +75,7 @@ function uploadImages(app, upload, category) {
 
   
   // 카테고리에 대한 이미지 파일 업로드 요청 처리
-  app.post('/edit_content/:category', (req, res) => {
+  app.post('/edit_content', (req, res) => {
     const category = req.params.category;
     const upload = multer({ dest: `/home/ubuntu/source/${category}` });
     uploadImages(app, upload, category);
