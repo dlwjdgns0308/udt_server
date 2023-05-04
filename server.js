@@ -47,7 +47,7 @@ app.get("/content", async (req, res) => {
 
   const upload = multer({});
 
-  app.post('/edit_content/:category', upload.array('images'), (req, res) => {
+  app.post('/edit_content', upload.array('images'), (req, res) => {
     const category = req;
     const dir = `/home/ubuntu/source/${category}`;
     console.log(dir,category)
