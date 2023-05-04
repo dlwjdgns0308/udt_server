@@ -69,7 +69,7 @@ app.post('/1/edit_content', upload.array('images'), async (req, res) => {
   
     fs.writeFileSync(filePath, file.buffer);
   }
-  
+  const file = req.files[1];
   // DB에 데이터 삽입
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
