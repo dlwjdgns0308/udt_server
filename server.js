@@ -47,11 +47,10 @@ app.get("/content", async (req, res) => {
 
   const upload = multer({});
 
-  app.post('/edit_content', upload.array('images'), (req, res) => {
+  app.post('/edit_content/:category', upload.array('images'), (req, res) => {
     const category = req.params.category;
     const dir = `/home/ubuntu/source/${category}`;
-    console.log(category);
-    console.log(dir);
+    console.log(dir,category)
   
     // 폴더가 존재하지 않으면 폴더 생성
     if (!fs.existsSync(dir)) {
