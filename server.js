@@ -48,23 +48,23 @@ app.get("/content", async (req, res) => {
   const upload = multer({});
 
   app.post('/edit_content', upload.array('images'), (req, res) => {
-    const category = req;
+    const category = req.body.category;
     const dir = `/home/ubuntu/source/${category}`;
     console.log(dir,category)
   
-    // // 폴더가 존재하지 않으면 폴더 생성
-    // if (!fs.existsSync(dir)) {
-    //   fs.mkdirSync(dir);
-    // }
+    // 폴더가 존재하지 않으면 폴더 생성
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
   
-    // // 파일 저장
-    // for (let i = 0; i < req.files.length; i++) {
-    //   const file = req.files[i];
-    //   const filename = file.originalname;
-    //   const filePath = `${dir}/${filename}`;
+    // 파일 저장
+    for (let i = 0; i < req.files.length; i++) {
+      const file = req.files[i];
+      const filename = file.originalname;
+      const filePath = `${dir}/${filename}`;
   
-    //   fs.writeFileSync(filePath, file.buffer);
-    // }
+      fs.writeFileSync(filePath, file.buffer);
+    }
   
     res.send('이미지 파일 업로드 완료');
   });
