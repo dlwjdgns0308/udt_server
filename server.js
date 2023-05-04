@@ -8,7 +8,17 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 
+function generateRandomString(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
+// console.log(generateRandomString(6)); // 랜덤한 6자리 문자열 출력 예시: "5gh9LZ"
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,9 +43,9 @@ app.get("/content", async (req, res) => {
 
     res.send({content:rows,title:rows2});
   });
-
+  const random = generateRandomString(6);
   // 업로드된 파일이 저장될 디렉토리 생성
-  const dir = '/home/ubuntu/source/test';
+  const dir = `/home/ubuntu/source/${random}`;
 
   fs.mkdir(dir, { recursive: true, mode: 0o755 }, (err) => {
     if (err) throw err;
@@ -45,11 +55,11 @@ app.get("/content", async (req, res) => {
 // 업로드된 파일이 저장될 디렉토리 설정
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/home/ubuntu/source/test');
+    cb(null, dir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname);
+    cb(null, file.originalname);
   },
 });
 
@@ -58,7 +68,8 @@ const upload = multer({ storage: storage });
 
 // 이미지 파일 업로드 요청 처리
 app.post('/edit_content', upload.array('images'), (req, res) => {
-  console.log(req.files); // 업로드된 파일 정보 출력
+  
+  console.log(req); // 업로드된 파일 정보 출력
   res.send('이미지 파일 업로드 완료');
 });
 
