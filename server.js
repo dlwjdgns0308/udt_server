@@ -66,7 +66,7 @@ app.post('/1/edit_content', upload.array('images'), async (req, res) => {
     const file = req.files[i];
     const filename = file.originalname;
     const filePath = `${dir}/${filename}`;
-    const sql = await DB.query("INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?, ?, ?) ",[req.query.id]);
+    const sql = await DB.query("INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ",[req.query.id]);
     const values = [`${category}`, `http://43.201.68.150:3001/source/${filePath}`, filename, null,"0"];
     const [rows, fields] = await DB.query(sql, values);
     fs.writeFileSync(filePath, file.buffer);
