@@ -43,29 +43,32 @@ app.get("/content", async (req, res) => {
 
     res.send({content:rows,title:rows2});
   });
-  const random = generateRandomString(6);
+
+
+
+app.post('/edit_content', (req, res) => {
   // 업로드된 파일이 저장될 디렉토리 생성
-  const dir = `/home/ubuntu/source/${random}`;
+  const dir = `/home/ubuntu/source/${req.category}`;
 
   fs.mkdir(dir, { recursive: true, mode: 0o755 }, (err) => {
     if (err) throw err;
     console.log(`${dir} directory created!`);
   });
   
-// 업로드된 파일이 저장될 디렉토리 설정
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.originalname);
-  },
+  // 업로드된 파일이 저장될 디렉토리 설정
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+      
+      cb(null, file.originalname);
+    },
+  });
+
+  // 파일 업로드 처리를 위한 multer 미들웨어 생성
+  const upload = multer({ storage: storage });
 });
-
-// 파일 업로드 처리를 위한 multer 미들웨어 생성
-const upload = multer({ storage: storage });
-
 // 이미지 파일 업로드 요청 처리
 app.post('/edit_content', upload.array('images'), (req, res) => {
   
