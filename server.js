@@ -66,16 +66,20 @@ app.post('/1/edit_content', upload.array('images'), async (req, res) => {
     const file = req.files[i];
     const filename = file.originalname;
     const filePath = `${dir}/${filename}`;
-  
+    const sql = await DB.query("INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?, ?, ?) ",[req.query.id]);
+    const values = [`${category}`, `http://43.201.68.150:3001/source/${filePath}`, filename, null,"0"];
+    const [rows, fields] = await DB.query(sql, values);
     fs.writeFileSync(filePath, file.buffer);
   }
   const file = req.files[0];
   const filename = file.originalname;
-  const filePath = `${dir}/${filename}`;
+  const Path = 'http://43.201.68.150:3001/source/'
+  const filePath = `${Path}/${dir}/${filename}`;
   // DB에 데이터 삽입
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
   const [rows, fields] = await DB.query(sql, values);
+
   console.log(rows);
   res.send('이미지 파일 업로드 완료');
 });
@@ -84,7 +88,16 @@ app.post('/2/edit_content', (req,res) => {
   const category = req.body.category;
 })
   
+app.get("/2/edit_content", async (req, res) => {
+  console.log(req.query.id);
+  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE category=? ",[req.query.id]);
 
+  const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value, creator, created_at FROM content WHERE category=? ",[req.query.id]);
+  
+  
+
+  res.send({content:rows,title:rows2});
+});
 
 app.get("/map", async (req, res) => {
     const [rows,fields] = await DB.query("SELECT  from_id,from_login,from_name,to_id,to_login,to_name,followed_at FROM t_relation");
