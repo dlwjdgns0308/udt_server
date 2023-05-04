@@ -45,29 +45,42 @@ app.get("/content", async (req, res) => {
   });
 
 
-  const upload = multer({});
+const upload = multer({});
+const date = new Date();
+const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 
-  app.post('/edit_content', upload.array('images'), (req, res) => {
-    const category = req.body.category;
-    const dir = `/home/ubuntu/source/${category}`;
-    console.log(dir,category)
+app.post('/1/edit_content', upload.array('images'), async (req, res) => {
+  const category = req.body.category;
+  const description = req.body.description;
+  const title = req.body.title;
+  const dir = `/home/ubuntu/source/${category}`;
+  console.log(dir,category)
   
-    // 폴더가 존재하지 않으면 폴더 생성
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+  // 폴더가 존재하지 않으면 폴더 생성
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
   
-    // 파일 저장
-    for (let i = 0; i < req.files.length; i++) {
-      const file = req.files[i];
-      const filename = file.originalname;
-      const filePath = `${dir}/${filename}`;
+  // 파일 저장
+  for (let i = 0; i < req.files.length; i++) {
+    const file = req.files[i];
+    const filename = file.originalname;
+    const filePath = `${dir}/${filename}`;
   
-      fs.writeFileSync(filePath, file.buffer);
-    }
+    fs.writeFileSync(filePath, file.buffer);
+  }
   
-    res.send('이미지 파일 업로드 완료');
-  });
+  // DB에 데이터 삽입
+  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
+  const [rows, fields] = await DB.query(sql, values);
+  console.log(rows);
+  res.send('이미지 파일 업로드 완료');
+});
+
+app.post('/2/edit_content', (req,res) => {
+  const category = req.body.category;
+})
   
 
 
