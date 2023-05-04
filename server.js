@@ -45,41 +45,29 @@ app.get("/content", async (req, res) => {
   });
 
 
-function uploadImages(app, upload, category) {
-  // 이미지 파일 업로드 요청 처리
+  const upload = multer({});
+
   app.post('/edit_content', upload.array('images'), (req, res) => {
-    console.log(req); // 업로드된 파일 정보 출력
+    const category = req.params.category;
+    const dir = `/home/ubuntu/source/${category}`;
+  
+    // 폴더가 존재하지 않으면 폴더 생성
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+  
+    // 파일 저장
+    for (let i = 0; i < req.files.length; i++) {
+      const file = req.files[i];
+      const filename = file.originalname;
+      const filePath = `${dir}/${filename}`;
+  
+      fs.writeFileSync(filePath, file.buffer);
+    }
+  
     res.send('이미지 파일 업로드 완료');
   });
-
-  // 업로드된 파일이 저장될 디렉토리 생성
-  const dir = `/home/ubuntu/source/${category}`;
-  fs.mkdir(dir, { recursive: true, mode: 0o755 }, (err) => {
-    if (err) throw err;
-    console.log(`${dir} directory created!`);
-  });
-
-  // 업로드된 파일이 저장될 디렉토리 설정
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, dir);
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    },
-  });
-
-  // 파일 업로드 처리를 위한 multer 미들웨어 생성
-  upload = multer({ storage: storage });
-}
-
   
-  // 카테고리에 대한 이미지 파일 업로드 요청 처리
-  app.post('/edit_content', (req, res) => {
-    const category = req.params.category;
-    const upload = multer({ dest: `/home/ubuntu/source/${category}` });
-    uploadImages(app, upload, category);
-  });
 
 
 app.get("/map", async (req, res) => {
