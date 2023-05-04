@@ -67,14 +67,14 @@ app.post('/1/edit_content', upload.array('images'), async (req, res) => {
     const filename = file.originalname;
     const filePath = `${dir}/${filename}`;
     const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-    const values = [`${category}`, `http://43.201.68.150:3001/source/${filePath}`, filename, null,"0"];
+    const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
     const [rows, fields] = await DB.query(sql, values);
     fs.writeFileSync(filePath, file.buffer);
   }
   const file = req.files[0];
   const filename = file.originalname;
-  const Path = 'http://43.201.68.150:3001/source/'
-  const filePath = `${Path}/${dir}/${filename}`;
+  const Path2 = 'http://43.201.68.150:3001/source/'
+  const filePath = `${Path2}/${category}/${filename}`;
   // DB에 데이터 삽입
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
