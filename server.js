@@ -33,11 +33,11 @@ app.get("/content", async (req, res) => {
   });
 
 
-const upload = multer({});
+const uploads = multer({});
 const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 
-app.post('/1/edit_content', upload.array('images'), async (req, res) => {
+app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const category = req.body.category;
   const description = req.body.description;
   const title = req.body.title;
@@ -88,6 +88,7 @@ app.get("/2/edit_content", async (req, res) => {
   res.send({content:rows,title:rows2});
 });
 
+const upload = multer({ });
 app.post('/2/edit_content/image', upload.single('image'), (req, res) => {
   try {
     const filePath = `${dir}/${filename}`;
