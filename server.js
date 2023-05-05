@@ -8,18 +8,6 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 
-function generateRandomString(length) {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
-// console.log(generateRandomString(6)); // 랜덤한 6자리 문자열 출력 예시: "5gh9LZ"
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -85,7 +73,7 @@ app.post('/1/edit_content', upload.array('images'), async (req, res) => {
 });
 
 app.post('/2/edit_content', (req,res) => {
-  const category = req.body.category;
+  const category = req.body;
   console.log(category);
 })
   
@@ -98,6 +86,16 @@ app.get("/2/edit_content", async (req, res) => {
   
 
   res.send({content:rows,title:rows2});
+});
+
+app.post('/2/edit_content/image', upload.single('image'), (req, res) => {
+  try {
+    const filePath = `${dir}/${filename}`;
+    console.log(filePath)
+    // fs.writeFileSync(filePath, req.file.buffer);
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to upload image.' });
+  }
 });
 
 
