@@ -91,6 +91,7 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/edit_content/image', upload.single('image'), (req, res) => {
   try {
+    const filename = req.file.originalname;
     const filePath = `${dir}/${filename}`;
     console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
