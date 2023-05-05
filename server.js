@@ -99,23 +99,4 @@ app.get("/2/edit_content", async (req, res) => {
   res.send({content:rows,title:rows2});
 });
 
-app.get("/map", async (req, res) => {
-    const [rows,fields] = await DB.query("SELECT  from_id,from_login,from_name,to_id,to_login,to_name,followed_at FROM t_relation");
-    res.send(rows);
-});
-
-app.post("/name_search",async  (req, res) => {
-    const user_name = req.body.name;
-    const [rows,fields] = await  DB.query("SELECT name FROM youtube_user_list WHERE name LIKE ?",[user_name + "%"]);
-    let arr2 = [];
-    rows.forEach((element) => {
-        arr2 = arr2.concat(element.name);
-    });
-    res.send(arr2);
-});
-app.listen(port, () => {
-    console.log(`Connect at http://localhost:${port}`);
-});
-
-
 
