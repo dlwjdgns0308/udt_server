@@ -92,8 +92,10 @@ const upload = multer({ });
 app.post('/2/edit_content/image', upload.single('image'), (req, res) => {
   try {
     const filename = req.file.originalname;
-    
-    console.log(filename)
+    const category = req.body.category;
+    const dir = `/home/ubuntu/source/${category}`;
+    const filePath = `${dir}/${filename}`;
+    console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
   } catch (error) {
     res.status(500).send({ error: 'Failed to upload image.' });
