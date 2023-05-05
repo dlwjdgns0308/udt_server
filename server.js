@@ -100,3 +100,9 @@ app.get("/2/edit_content", async (req, res) => {
 });
 
 
+app.listen(port, () => {
+    console.log(`Connect at http://localhost:${port}`);
+});
+
+
+
