@@ -73,7 +73,8 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
 });
 
 app.post('/2/edit_content', (req,res) => {
-  const category = req.body;
+  const category = req;
+  console.log("ff")
   console.log(category);
 })
   
