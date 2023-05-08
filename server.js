@@ -88,6 +88,7 @@ const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), (req, res) => {
   try {
     console.log(req.body);
+    console.log(req.files);
     // const category = req.body.category;
     // const name = req.body.name;
     // const dir = `/home/ubuntu/source/${category}`;
