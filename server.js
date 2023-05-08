@@ -87,24 +87,24 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), (req, res) => {
   try {
-   
-    const category = req.body.category;
-    const name = req.body.name;
-    const dir = `/home/ubuntu/source/${category}`;
-    const filePath = `${dir}/${name}`;
-    console.log(filePath)
+    console.log(req.body);
+    // const category = req.body.category;
+    // const name = req.body.name;
+    // const dir = `/home/ubuntu/source/${category}`;
+    // const filePath = `${dir}/${name}`;
+    // console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
 
     for (let i = 0; i < req.files.length; i++) {
-      const file = req.files[i];
-      const name = req.body.name[i];
-      const filePath = `${dir}/${name}`;
-      // 수정쿼리 넣기
+      // const file = req.files[i];
+      // const name = req.body.name[i];
+      // const filePath = `${dir}/${name}`;
+      // // 수정쿼리 넣기
       const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
       // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
       // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
       // const [rows, fields] = await DB.query(sql, values);
-      fs.writeFileSync(filePath, file.buffer);
+      // fs.writeFileSync(filePath, file.buffer);
     }
     res.status(200).send({ messege :'sucess' });
   } catch (error) {
