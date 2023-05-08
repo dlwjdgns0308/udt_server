@@ -72,11 +72,6 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   res.send('이미지 파일 업로드 완료');
 });
 
-app.post('/2/edit_content', (req,res) => {
-  const category = req;
-  console.log("ff")
-  console.log(category);
-})
   
 app.get("/2/edit_content", async (req, res) => {
   console.log(req.query.id);
