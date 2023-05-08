@@ -23,7 +23,7 @@ app.use('/source', express.static('/home/ubuntu/source'))
 
 app.get("/content", async (req, res) => {
     console.log(req.query.id);
-    const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE category=? ",[req.query.id]);
+    const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
 
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
     
@@ -80,8 +80,8 @@ app.post('/2/edit_content', (req,res) => {
 app.get("/2/edit_content", async (req, res) => {
   console.log(req.query.id);
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE category=? ",[req.query.id]);
-
   const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
+  
   
   
 
@@ -89,14 +89,28 @@ app.get("/2/edit_content", async (req, res) => {
 });
 
 const upload = multer({ });
-app.post('/2/edit_content/image', upload.single('image'), (req, res) => {
+app.post('/2/edit_content/image', upload.array('image'), (req, res) => {
   try {
-    const filename = req.file.originalname;
+   
     const category = req.body.category;
+    const name = req.body.name;
     const dir = `/home/ubuntu/source/${category}`;
-    const filePath = `${dir}/${filename}`;
+    const filePath = `${dir}/${name}`;
     console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
+
+    for (let i = 0; i < req.files.length; i++) {
+      const file = req.files[i];
+      const name = req.body.name[i];
+      const filePath = `${dir}/${name}`;
+      // 수정쿼리 넣기
+      const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
+      // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+      // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
+      // const [rows, fields] = await DB.query(sql, values);
+      fs.writeFileSync(filePath, file.buffer);
+    }
+    res.status(200).send({ messege :'sucess' });
   } catch (error) {
     res.status(500).send({ error: 'Failed to upload image.' });
   }
