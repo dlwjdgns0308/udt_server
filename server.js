@@ -97,20 +97,28 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
     // console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
 
-    for (let i = 0; i < req.files.length; i++) {
-      const file = req.files[i];
-      console.log(file)
-      const name = req.body.filename[i];
-      console.log(name)
+    if(req.files.length == 1){
+      const file = req.files[0];
+      const name = req.body.filename;
       const filePath = `${dir}/${name}`;
-      console.log(filePath)
-      // // 수정쿼리 넣기
-      const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
-      // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-      // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
-      // const [rows, fields] = await DB.query(sql, values);
-      // fs.writeFileSync(filePath, file.buffer);
+      fs.writeFileSync(filePath, file.buffer);
+    }else{
+      for (let i = 0; i < req.files.length; i++) {
+        const file = req.files[i];
+        console.log(file)
+        const name = req.body.filename[i];
+        console.log(name)
+        const filePath = `${dir}/${name}`;
+        console.log(filePath)
+        // // 수정쿼리 넣기
+        const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
+        // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+        // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
+        // const [rows, fields] = await DB.query(sql, values);
+        fs.writeFileSync(filePath, file.buffer);
+      }
     }
+   
     res.status(200).send({ messege :'sucess' });
   } catch (error) {
     res.status(500).send({ error: 'Failed to upload image.' });
