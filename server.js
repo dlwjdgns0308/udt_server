@@ -108,7 +108,7 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
       // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
       // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
       // const [rows, fields] = await DB.query(sql, values);
-      fs.writeFileSync(filePath, file.buffer);
+      // fs.writeFileSync(filePath, file.buffer);
     }
     res.status(200).send({ messege :'sucess' });
   } catch (error) {
