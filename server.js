@@ -101,6 +101,7 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
       const file = req.files[i];
       console.log(file)
       const name = req.body.filename[i];
+      console.log(name)
       const filePath = `${dir}/${name}`;
       console.log(filePath)
       // // 수정쿼리 넣기
