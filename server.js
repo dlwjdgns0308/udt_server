@@ -90,17 +90,19 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
     // console.log(req.body);
     console.log(req)
 
-    // const category = req.body.category;
+    const category = req.body.category;
     // const name = req.body.name;
-    // const dir = `/home/ubuntu/source/${category}`;
+    const dir = `/home/ubuntu/source/${category}`;
     // const filePath = `${dir}/${name}`;
     // console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
 
     for (let i = 0; i < req.files.length; i++) {
-      // const file = req.files[i];
-      // const name = req.body.name[i];
-      // const filePath = `${dir}/${name}`;
+      const file = req.files[i];
+      const name = req.body.name[i];
+      console.log(file)
+      const filePath = `${dir}/${name}`;
+      console.log(filePath)
       // // 수정쿼리 넣기
       const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
       // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
