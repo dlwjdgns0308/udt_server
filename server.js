@@ -75,7 +75,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   
 app.get("/2/edit_content", async (req, res) => {
   console.log(req.query.id);
-  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE category=? ",[req.query.id]);
+  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
   
   
@@ -85,13 +85,16 @@ app.get("/2/edit_content", async (req, res) => {
 });
 
 const upload = multer({ });
-app.post('/2/edit_content', upload.array('image'), (req, res) => {
+app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
     const datas = JSON.parse(req.body.data);
     // console.log(datas); 
 
-    datas.forEach(data => {
+    datas.forEach(async data => {
       console.log(data);
+      const sql = 'UPDATE content SET name = ?, value = ? WHERE img_url = ?;';
+      const values = [data.name,data.value,data.img_url];
+      const [rows, fields] = await DB.query(sql, values);
     });
     const category = req.body.category;
     
