@@ -87,7 +87,7 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), (req, res) => {
   try {
-    console.log(req.body);
+    console.log(req.body.data);
     // console.log(req)
 
     const category = req.body.category;
@@ -111,7 +111,8 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
         const filePath = `${dir}/${name}`;
         console.log(filePath)
         // // 수정쿼리 넣기
-        const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
+        
+        const sql = 'UPDATE content SET name = ?, value = ? WHERE img_url = ?;';
         // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
         // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
         // const [rows, fields] = await DB.query(sql, values);
