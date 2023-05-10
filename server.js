@@ -87,7 +87,7 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), (req, res) => {
   try {
-    const data = JSON.parse(req.body.data);
+    const data = req.body.data;
     console.log(data); // { name: 'John', age: 30 }
 
     const category = req.body.category;
