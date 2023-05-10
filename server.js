@@ -99,6 +99,7 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
 
     if(req.files.length == 1){
       const file = req.files[0];
+      console.log(req.body.data[0]);
       const name = req.body.filename;
       const filePath = `${dir}/${name}`;
       fs.writeFileSync(filePath, file.buffer);
