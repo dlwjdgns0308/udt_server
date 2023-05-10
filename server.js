@@ -90,7 +90,7 @@ app.post('/2/edit_content', upload.array('image'), (req, res) => {
     const datas = JSON.parse(req.body.data);
     // console.log(datas); 
 
-    datas.array.forEach(data => {
+    datas.forEach(data => {
       console.log(data);
     });
     const category = req.body.category;
