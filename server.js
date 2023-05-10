@@ -87,9 +87,12 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), (req, res) => {
   try {
-    const data = JSON.parse(req.body.data);
-    console.log(data); // { name: 'John', age: 30 }
+    const datas = JSON.parse(req.body.data);
+    console.log(datas); 
 
+    datas.array.forEach(data => {
+      console.log(data);
+    });
     const category = req.body.category;
     
     const dir = `/home/ubuntu/source/${category}`;
