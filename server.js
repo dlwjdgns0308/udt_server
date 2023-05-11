@@ -84,8 +84,9 @@ app.get("/2/edit_content", async (req, res) => {
   res.send({content:rows,title:rows2});
 });
 const upload = multer({ });
-app.post('/2/cancel_content',  (req, res) => {
-  console.log(req.body);
+app.post('/2/cancel_content',  async (req, res) => {
+  const img = req.body.img_url;
+  const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
   res.send('Data received');
 });
 
