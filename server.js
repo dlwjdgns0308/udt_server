@@ -87,16 +87,20 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
+    const category = req.body.category;
     const datas = JSON.parse(req.body.data);
-    console.log(req.body); 
-
+    const message = req.body.message; 
+    const level = req.body.level; 
+    const sql2 = 'UPDATE category SET message = ?, level = ? WHERE category = ?;';
+    const values2 = [message,level,category];
+    const [rows2, fields2] = await DB.query(sql2, values2);
     datas.forEach(async data => {
       console.log(data);
-      const sql = 'UPDATE content SET name = ?, value = ? WHERE img_url = ?;';
-      const values = [data.name,data.value,data.img_url];
+      const sql = 'UPDATE content SET name = ?, value = ? , author = ? WHERE img_url = ?;';
+      const values = [data.name,data.value,data.author,data.img_url];
       const [rows, fields] = await DB.query(sql, values);
     });
-    const category = req.body.category;
+    
     
     const dir = `/home/ubuntu/source/${category}`;
     // const filePath = `${dir}/${name}`;
