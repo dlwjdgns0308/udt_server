@@ -91,8 +91,9 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     const datas = JSON.parse(req.body.data);
     const message = req.body.message; 
     const level = req.body.level; 
-    const sql2 = 'UPDATE category SET message = ?, level = ? WHERE category = ?;';
-    const values2 = [message,level,category];
+    const unit = req.body.unit; 
+    const sql2 = 'UPDATE category SET message = ?, level = ?, unit= ? WHERE category = ?;';
+    const values2 = [message,level,unit,category];
     const [rows2, fields2] = await DB.query(sql2, values2);
     datas.forEach(async data => {
       console.log(data);
