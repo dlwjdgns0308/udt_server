@@ -85,7 +85,7 @@ app.get("/2/edit_content", async (req, res) => {
 });
 
 app.post("/2/cancel_content", async (req, res) => {
-  console.log(req);
+  console.log(req.body.img_url);
 });
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
