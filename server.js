@@ -85,7 +85,7 @@ app.get("/2/edit_content", async (req, res) => {
 });
 
 app.post("/2/cancel_content", async (req, res) => {
-  console.log(req.body);
+  console.log(req);
 });
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
@@ -99,7 +99,7 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     const values2 = [message,level,unit,category];
     const [rows2, fields2] = await DB.query(sql2, values2);
     datas.forEach(async data => {
-      console.log(data);
+      // console.log(data);
       const sql = 'UPDATE content SET name = ?, value = ? , author = ? WHERE img_url = ?;';
       const values = [data.name,data.value,data.author,data.img_url];
       const [rows, fields] = await DB.query(sql, values);
