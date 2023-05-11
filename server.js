@@ -84,7 +84,7 @@ app.get("/2/edit_content", async (req, res) => {
   res.send({content:rows,title:rows2});
 });
 
-app.post('/cancel_content', (req, res) => {
+app.post('/2/cancel_content', (req, res) => {
   console.log(req.body);
   res.send('Data received');
 });
