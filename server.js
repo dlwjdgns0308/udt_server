@@ -75,6 +75,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   
 app.get("/2/edit_content", async (req, res) => {
   console.log(req.query.id);
+  console.log(req.query.count);
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
   
