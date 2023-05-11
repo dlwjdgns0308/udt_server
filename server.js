@@ -83,12 +83,12 @@ app.get("/2/edit_content", async (req, res) => {
 
   res.send({content:rows,title:rows2});
 });
-
-app.post('/2/cancel_content', (req, res) => {
+const upload = multer({ });
+app.post('/2/cancel_content',upload.array('image'),  (req, res) => {
   console.log(req.body);
   res.send('Data received');
 });
-const upload = multer({ });
+
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
     const category = req.body.category;
