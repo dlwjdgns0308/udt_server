@@ -84,14 +84,9 @@ app.get("/2/edit_content", async (req, res) => {
   res.send({content:rows,title:rows2});
 });
 
-app.post("/2/cancel_content", (req, res) => {
-  try{
-     console.log(req.body);
-     res.status(200).send({ error: 'success' });
-    }
-    catch(error){
-      res.status(500).send({ error: 'Failed to upload image.' });
-    }
+app.post('/cancel_content', (req, res) => {
+  console.log(req.body);
+  res.send('Data received');
 });
 const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
