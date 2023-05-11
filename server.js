@@ -88,7 +88,7 @@ const upload = multer({ });
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
     const datas = JSON.parse(req.body.data);
-    // console.log(datas); 
+    console.log(req.body); 
 
     datas.forEach(async data => {
       console.log(data);
