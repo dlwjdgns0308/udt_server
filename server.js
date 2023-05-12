@@ -75,22 +75,20 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   
 app.get("/2/edit_content", async (req, res) => {
   console.log(req.query.id);
-  console.log(req.query.count);
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
-  const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=? LIMIT ?", [req.query.id, parseInt(req.query.count)]);
-
-  
-  
-  
-
+  const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [req.query.id]);
   res.send({content:rows,title:rows2});
 });
+
+
+
 const upload = multer({ });
 app.post('/2/cancel_content',  async (req, res) => {
   const img = req.body.img_url;
   const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
   res.send('Data received');
 });
+
 
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
