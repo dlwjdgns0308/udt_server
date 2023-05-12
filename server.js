@@ -70,8 +70,8 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   '숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?','이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!','이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.'];
   const level = ['초보자','학습자','수련생','전문가','베테랑','스페셜리스트','고수','마스터','거장','대가','전설'];
   // DB에 데이터 삽입
-  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount, message, level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0, message, level];
+  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
