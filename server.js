@@ -68,10 +68,10 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   '오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!','초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.',
   '이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.','이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!','이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!',
   '숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?','이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!','이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.'];
-  const level = ['초보자','학습자','수련생','전문가','베테랑','스페셜리스트','고수','마스터','거장','대가','전설'];
+  const level = "'초보자','학습자','수련생','전문가','베테랑','스페셜리스트','고수','마스터','거장','대가','전설'";
   // DB에 데이터 삽입
-  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
+  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0,level];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
