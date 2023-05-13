@@ -75,7 +75,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     console.log(rows);
     res.send('이미지 파일 업로드 완료');
   }catch(error){
-    res.status(500).send(error);
+    res.status(405).send(error);
   }
  
 });
