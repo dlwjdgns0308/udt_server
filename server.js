@@ -41,6 +41,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const category = req.body.category;
   const description = req.body.description;
   const title = req.body.title;
+  const user = req.body.user;
   const dir = `/home/ubuntu/source/${category}`;
   console.log(dir,category)
   
@@ -65,7 +66,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const filePath = `${Path2}/${category}/${filename}`;
   // DB에 데이터 삽입
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '원', 0];
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
