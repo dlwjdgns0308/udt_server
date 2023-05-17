@@ -51,7 +51,7 @@ app.get("/1/edit_content", async (req, res) => {
     res.status(123).send('다른 유저의 접근입니다.');
   }
  
-  
+  res.send({content:rows,title:rows2});
 });
 
 
