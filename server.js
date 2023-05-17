@@ -7,6 +7,7 @@ const DB = require("./db");
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+const { error } = require("console");
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,6 +37,22 @@ app.get("/content", async (req, res) => {
 const uploads = multer({});
 const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
+
+
+app.get("/1/edit_content", async (req, res) => {
+  const category = req.query.id;
+  const user = req.query.user;
+  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
+  const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [category]);
+  if(rows2.creator == user){
+    res.send({content:rows,title:rows2});
+  }else{
+    res.status(123).send('다른 유저의 접근입니다.');
+  }
+ 
+  
+});
+
 
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   try{
@@ -71,7 +88,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
     // DB�뿉 �뜲�씠�꽣 �궫�엯
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0,message, level];
+    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
   
     console.log(rows);
