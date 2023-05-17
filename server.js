@@ -65,8 +65,8 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const Path2 = 'http://43.201.68.150:3001/source/'
     const filePath = `${Path2}/${category}/${filename}`;
     const message = 
-    "�옒紐� �겢由��븯�떊嫄곗짛? �떎�떆 �븳 踰� �룄�쟾�빐蹂댁꽭�슂!,�씠踰� �젅踰⑥�� 醫� 源뚮떎濡쒖썱�굹遊먯슂. �븯吏�留� �떎�쓬�뿉�뒗 �뜑 �옱諛뚮뒗 �룄�쟾�씠 以�鍮꾨릺�뼱 �엳�쓣 嫄곗뿉�슂.,�삤�뒛��� �슫�씠 蹂꾨줈 �뾾�뿀�굹遊먯슂. �떎�쓬�뿉�뒗 醫� �뜑 �슫�씠 醫뗪린瑜� 鍮뚯뼱�뱶�젮�슂!,珥덈낫�옄媛� �븘�땲�떆援곗슂! �뜑 �뼱�젮�슫 紐⑺몴瑜� �뼢�빐 �굹�븘媛�蹂댁꽭�슂.,�씠踰덉뿉�룄 硫뗭쭊 寃곌낵瑜� �씠猷⑥뀲�뒿�땲�떎. �븯吏�留� �씠�젣遺��꽣�뒗 �뜑 �겙 �룄�쟾�씠 湲곕떎由ш퀬 �엳�떟�땲�떎.,�씠誘� 寃쏀뿕�씠 留롮쑝�떊 遺꾩씠�떆�땲 �씠�젨 �뜑�슧 �뜑 ����떒�븳 寃곌낵瑜� �씠猷⑥뀛�룄 �맗�땲�떎. �슦由ш�� 湲곕���븷寃뚯슂!,�씠踰� �떎�뙣�뒗 �떎�쓬�뿉�뒗 瑗� �꽦怨듯븷 �옄�떊�쓣 �궎�썙以� 嫄곗뿉�슂. 議곌툑留� �뜑 �끂�젰�븯硫� �맗�땲�떎!,�닕�젴�옄湲됱씠�떆援곗슂. �씠�젨 �뜑 �뼱�젮�슫 �룄�쟾�룄 �쟾��� 臾댁꽠吏� �븡寃좎짛?,�씠誘� 理쒓퀬�뿉 �룄�떖�븯�뀲�뒿�땲�떎! �씠�젣�뒗 �뜑 �옄�쑀濡�寃� �룄�쟾�빐蹂댁꽭�슂. �떦�떊�쓽 �옱�뒫�쓣 蹂댁뿬二쇱꽭�슂!,�씠踰� 寃곌낵�뒗 �뿭���湲됱엯�땲�떎! �떦�떊�씠 �씠 寃뚯엫�쓽 �쟾�꽕�씠 �맆 嫄곗뿉�슂.";
-    const level = "珥덈낫�옄,�븰�뒿�옄,�닔�젴�깮,�쟾臾멸��,踰좏뀒�옉,�뒪�럹�뀥由ъ뒪�듃,怨좎닔,留덉뒪�꽣,嫄곗옣,���媛�,�쟾�꽕";
+    "잘못 클릭하신거죠? 다시 한 번 도전해보세요!,이번 레벨은 좀 까다로웠나봐요. 하지만 다음에는 더 재밌는 도전이 준비되어 있을 거에요.,오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!,초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.,이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.,이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!,이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!,숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?,이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!,이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.";
+    const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
     // DB�뿉 �뜲�씠�꽣 �궫�엯
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , 'pugn',datetime, '�썝', 0,message, level];
@@ -153,42 +153,16 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     // console.log(req.body);
     console.log(req)
 
-    const category = req.body.category;
+ 
     // const name = req.body.name;
-    const dir = `/home/ubuntu/source/${category}`;
     // const filePath = `${dir}/${name}`;
     // console.log(filePath)
     // fs.writeFileSync(filePath, req.file.buffer);
 
-    if(req.files.length == 1){
-      const file = req.files[0];
-      console.log(req.body.data[0].name);
-      const name = req.body.filename;
-      const filePath = `${dir}/${name}`;
-      fs.writeFileSync(filePath, file.buffer);
-    }else{
-      for (let i = 0; i < req.files.length; i++) {
-        console.log(req.body.data[i].name);
-        const file = req.files[i];
-        console.log(file)
-        const name = req.body.filename[i];
-        console.log(name)
-        const filePath = `${dir}/${name}`;
-        console.log(filePath)
-        // // �닔�젙荑쇰━ �꽔湲�
-        
-        const sql = 'UPDATE content SET name = ?, value = ? WHERE img_url = ?;';
-        // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-        // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
-        // const [rows, fields] = await DB.query(sql, values);
-        fs.writeFileSync(filePath, file.buffer);
-      }
     for (let i = 0; i < req.files.length; i++) {
-      const file = req.files[i];
-      const name = req.body.name[i];
-      console.log(file)
-      const filePath = `${dir}/${name}`;
-      console.log(filePath)
+      // const file = req.files[i];
+      // const name = req.body.name[i];
+      // const filePath = `${dir}/${name}`;
       // // �닔�젙荑쇰━ �꽔湲�
       const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
       // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
