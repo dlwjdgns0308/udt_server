@@ -41,20 +41,7 @@ const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 
 app.post("/1/edit_content/start", async (req, res) => {
   console.log(req.body)
-  const session = JSON.parse(req.body.session);
-  const user = session.user.email;
-  const category = req.body.category;
-  
-  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
-  const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [category]);
-  if(rows2.creator == undefined){
-    res.status(200).send();
-    
-  }else if(rows2.creator == user){
-    res.send({content:rows,title:rows2});
-  }else{
-    res.status(123).send('다른 유저의 접근입니다.');
-  }
+
  
 });
 
