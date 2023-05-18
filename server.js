@@ -39,7 +39,7 @@ const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 
 
-app.get("/1/edit_content", async (req, res) => {
+app.post("/1/edit_content/start", async (req, res) => {
   const category = req.query.id;
   const user = req.query.user;
   console.log(user, category)
