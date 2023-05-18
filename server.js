@@ -40,7 +40,7 @@ const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 
 
 app.post("/1/edit_content/start", async (req, res) => {
-  console.log(req.body.user.email)
+  console.log(req.body)
   const user = req.body.user.email;
   const category = req.body.category;
   
