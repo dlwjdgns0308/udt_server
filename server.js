@@ -40,9 +40,8 @@ const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 
 
 app.post("/1/edit_content/start", async (req, res) => {
-  const category = req.query.id;
-  const user = req.query.user;
-  console.log(user, category)
+  console.log(req.body)
+  
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [category]);
   if(rows2.creator == user){
