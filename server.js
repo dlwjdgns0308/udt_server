@@ -148,7 +148,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const filePath = `${Path2}/${category}/${filename}`;
   // DB�뿉 �뜲�씠�꽣 �궫�엯
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0];
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
