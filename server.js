@@ -37,7 +37,7 @@ app.get("/content", async (req, res) => {
 const uploads = multer({});
 const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
-
+const creater = undefined;
 
 app.post("/1/edit_content/start", async (req, res) => {
   console.log(req.body)
@@ -49,9 +49,9 @@ app.post("/1/edit_content/start", async (req, res) => {
  
  
   if (rows2.length == 0){
-    const creator = undefined
+    creator = undefined
   }else{
-    const creator = rows2[0].creator;
+    creator = rows2[0].creator;
   }
   console.log(user, category,  creator)
   if( creator == undefined){
