@@ -48,7 +48,7 @@ app.post("/1/edit_content/start", async (req, res) => {
   const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [category]);
  
  
-  if (rows2[0].length == 0){
+  if (rows2.length == 0){
     const creator = undefined
   }else{
     const creator = rows2[0].creator;
