@@ -20,6 +20,14 @@ app.post("/list/main",async (req, res) => {
     res.send(rows);
 });
 
+
+app.post("/list/mypage",async (req, res) => {
+  const user = req.body.session.user.email;
+  const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
+  
+  res.send(rows);
+});
+
 app.use('/source', express.static('/home/ubuntu/source'))
 
 app.get("/content", async (req, res) => {
