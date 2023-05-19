@@ -46,13 +46,12 @@ app.post("/1/edit_content/start", async (req, res) => {
   
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [category]);
-  const creator = rows2[0].creator
-  console.log(user, category, creator)
+  console.log(user, category,  rows2[0].creator)
   
-  if(creator == undefined){
+  if( rows2[0].creator == undefined){
     //새로운 컨텐츠
     res.status(200).send();
-  }else if(creator == user){
+  }else if( rows2[0].creator == user){
     //기존유저
     res.status(300).send({content:rows,title:rows2});
   }else{
