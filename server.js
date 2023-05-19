@@ -60,7 +60,7 @@ app.post("/1/edit_content/start", async (req, res) => {
   }else if( creator == user){
     //기존유저
     res.status(300).send({content:rows,title:rows2});
-  }else{
+  }else if(creator != undefined && creater != user){
     //다른유저
     res.status(123).send('다른 유저의 접근입니다.');
   }
