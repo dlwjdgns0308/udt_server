@@ -59,7 +59,7 @@ app.post("/1/edit_content/start", async (req, res) => {
     res.status(200).send();
   }else if( creator == user){
     //기존유저
-    res.status(200).send({content:rows,title:rows2});
+    res.status(201).send({content:rows,title:rows2});
   }else{
     //다른유저
     console.log("fsfsdfdsfds")
