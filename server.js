@@ -126,11 +126,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
-  const dir = `/home/ubuntu/source/${category}`;
 
-if (fs.existsSync(dir)) {
-  fs.rmdirSync(dir, { recursive: true });
-}
     console.log(rows);
     res.send('성공');
   }catch(error){
