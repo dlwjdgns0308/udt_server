@@ -29,10 +29,16 @@ app.post("/list/mypage",async (req, res) => {
 });
 
 app.post("/list/mypagedel",async (req, res) => {
-  console.log(req.body);
+  const category = req.body.category;
   // const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
-  
-  res.send(rows);
+  const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
+  const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
+  const dir = `/home/ubuntu/source/${category}`;
+
+  if (fs.existsSync(dir)) {
+    fs.rmdirSync(dir, { recursive: true });
+  }
+  res.status(200).send('성공적으로 데이터를 삭제하였습니다');
 });
 
 app.use('/source', express.static('/home/ubuntu/source'))
@@ -120,7 +126,11 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
-  
+  const dir = `/home/ubuntu/source/${category}`;
+
+if (fs.existsSync(dir)) {
+  fs.rmdirSync(dir, { recursive: true });
+}
     console.log(rows);
     res.send('성공');
   }catch(error){
