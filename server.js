@@ -28,6 +28,13 @@ app.post("/list/mypage",async (req, res) => {
   res.send(rows);
 });
 
+app.post("/list/mypagedel",async (req, res) => {
+  console.log(req.body);
+  // const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
+  
+  res.send(rows);
+});
+
 app.use('/source', express.static('/home/ubuntu/source'))
 
 app.get("/content", async (req, res) => {
@@ -152,7 +159,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
-  res.send('�씠誘몄�� �뙆�씪 �뾽濡쒕뱶 �셿猷�');
+  res.send('처리되었습니다');
 });
 
   
