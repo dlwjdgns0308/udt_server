@@ -16,7 +16,27 @@ app.use(cors());
 
 app.post("/list/main",async (req, res) => {
     console.log(req.body)
-    const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category");
+    const selectBtn1 = req.body.selectedButton1;
+    const selectBtn2 = req.body.selectedButton2;
+
+    const query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
+    if(selectBtn1 == 'latest'){
+      query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
+    }else{
+      query += " ORDER BY likecount DESC"; // 인기순으로 데이터 정렬
+    }
+
+
+    if (selectBtn2 === 'day') {
+      query += " WHERE DATE(created_at) >= CURDATE() - INTERVAL 1 DAY"; // 일별로 데이터를 필터링 (지난 1일)
+    } else if (selectBtn2 === 'week') {
+      query += " WHERE YEARWEEK(created_at) = YEARWEEK(CURDATE())"; // 주별로 데이터를 필터링 (이번 주)
+    } else if (selectBtn2 === 'month') {
+      query += " WHERE YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE())"; // 월별로 데이터를 필터링 (이번 달)
+    }else{
+      
+    }
+    const [rows,fields] = await DB.query(query);
     
     res.send(rows);
 });
@@ -50,7 +70,7 @@ app.post("/list/mypagedel",async (req, res) => {
   if (fs.existsSync(dir)) {
     fs.rmdirSync(dir, { recursive: true });
   }
-  res.status(200).send('?��공적?���? ?��?��?���? ?��?��?��????��?��?��');
+  res.status(200).send('�꽦怨듭쟻�쑝濡� �뜲�씠�꽣瑜� �궘�젣�븯����뒿�땲�떎');
 });
 
 app.use('/source', express.static('/home/ubuntu/source'))
@@ -90,13 +110,13 @@ app.post("/1/edit_content/start", async (req, res) => {
   }
   console.log(user, category,  creator)
   if( creator == undefined){
-    //?��로운 컨텐�?
+    //�깉濡쒖슫 而⑦뀗痢�
     res.status(200).send();
   }else if( creator == user){
-    //기존?��???
+    //湲곗〈�쑀���
     res.status(201).send({content:rows,title:rows2});
   }else{
-    //?��른유???
+    //�떎瑜몄쑀���
     console.log("fsfsdfdsfds")
     res.status(300).send();
   }
@@ -114,12 +134,12 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const dir = `/home/ubuntu/source/${category}`;
     console.log(dir,category)
     
-    // �뤃�뜑媛� 議댁?���븯吏� �븡�쑝硫� �뤃�뜑 �깮�꽦
+    // 占쎈쨨占쎈쐭揶쏉옙 鈺곕똻�삺占쎈릭筌욑옙 占쎈륫占쎌몵筌롳옙 占쎈쨨占쎈쐭 占쎄문占쎄쉐
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
     
-    // �뙆�씪 ����?��
+    // 占쎈솁占쎌뵬 占쏙옙占쏙옙�삢
     for (let i = 0; i < req.files.length; i++) {
       const file = req.files[i];
       const filename = file.originalname;
@@ -134,15 +154,15 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const Path2 = 'http://43.201.68.150:3001/source/'
     const filePath = `${Path2}/${category}/${filename}`;
     const message = 
-    "?���? ?���??��?��거죠? ?��?�� ?�� �? ?��?��?��보세?��!,?���? ?��벨�?? �? 까다로웠?��봐요. ?���?�? ?��?��?��?�� ?�� ?��밌는 ?��?��?�� �?비되?�� ?��?�� 거에?��.,?��?��??? ?��?�� 별로 ?��?��?��봐요. ?��?��?��?�� �? ?�� ?��?�� 좋기�? 빌어?��?��?��!,초보?���? ?��?��?��군요! ?�� ?��?��?�� 목표�? ?��?�� ?��?���?보세?��.,?��번에?�� 멋진 결과�? ?��루셨?��?��?��. ?���?�? ?��?���??��?�� ?�� ?�� ?��?��?�� 기다리고 ?��?��?��?��.,?���? 경험?�� 많으?�� 분이?��?�� ?��?�� ?��?�� ?�� ????��?�� 결과�? ?��루셔?�� ?��?��?��. ?��리�?? 기�???��게요!,?���? ?��?��?�� ?��?��?��?�� �? ?��공할 ?��?��?�� ?��?���? 거에?��. 조금�? ?�� ?��?��?���? ?��?��?��!,?��?��?��급이?��군요. ?��?�� ?�� ?��?��?�� ?��?��?�� ?��??? 무섭�? ?��겠죠?,?���? 최고?�� ?��?��?��?��?��?��?��! ?��?��?�� ?�� ?��?���?�? ?��?��?��보세?��. ?��?��?�� ?��?��?�� 보여주세?��!,?���? 결과?�� ?��???급입?��?��! ?��?��?�� ?�� 게임?�� ?��?��?�� ?�� 거에?��.";
-    const level = "초보?��,?��?��?��,?��?��?��,?��문�??,베테?��,?��?��?��리스?��,고수,마스?��,거장,???�?,?��?��";
-    // DB�뿉 �뜲�씠�꽣 �궫�엯
+    "잘못 클릭하신거죠? 다시 한 번 도전해보세요!,이번 레벨은 좀 까다로웠나봐요. 하지만 다음에는 더 재밌는 도전이 준비되어 있을 거에요.,오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!,초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.,이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.,이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!,이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!,숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?,이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!,이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.";
+    const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
+    // DB占쎈퓠 占쎈쑓占쎌뵠占쎄숲 占쎄땜占쎌뿯
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '?��', 0,message, level];
+    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
 
     console.log(rows);
-    res.send('?���?');
+    res.send('�꽦怨�');
   }catch(error){
     res.status(405).send(error);
   }
@@ -154,12 +174,12 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const dir = `/home/ubuntu/source/${category}`;
   console.log(dir,category)
   
-  // �뤃�뜑媛� 議댁?���븯吏� �븡�쑝硫� �뤃�뜑 �깮�꽦
+  // 占쎈쨨占쎈쐭揶쏉옙 鈺곕똻�삺占쎈릭筌욑옙 占쎈륫占쎌몵筌롳옙 占쎈쨨占쎈쐭 占쎄문占쎄쉐
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
   
-  // �뙆�씪 ����?��
+  // 占쎈솁占쎌뵬 占쏙옙占쏙옙�삢
   for (let i = 0; i < req.files.length; i++) {
     const file = req.files[i];
     const filename = file.originalname;
@@ -173,13 +193,13 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const filename = file.originalname;
   const Path2 = 'http://43.201.68.150:3001/source/'
   const filePath = `${Path2}/${category}/${filename}`;
-  // DB�뿉 �뜲�씠�꽣 �궫�엯
+  // DB占쎈퓠 占쎈쑓占쎌뵠占쎄숲 占쎄땜占쎌뿯
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '?��', 0];
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
-  res.send('처리?��?��?��?��?��');
+  res.send('泥섎━�릺�뿀�뒿�땲�떎');
 });
 
   
@@ -232,7 +252,7 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
       // const file = req.files[i];
       // const name = req.body.name[i];
       // const filePath = `${dir}/${name}`;
-      // // �닔�젙?��?��?�� �꽔湲�
+      // // 占쎈땾占쎌젟�뜎�눖�봺 占쎄퐫疫뀐옙
       const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
       // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
       // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
