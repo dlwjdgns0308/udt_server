@@ -27,11 +27,11 @@ app.post("/list/main",async (req, res) => {
     }
 
 
-    if (selectBtn2 === 'day') {
+    if (selectBtn2 == 'day') {
       query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW();" // 일별로 데이터를 필터링 (지난 1일)
-    } else if (selectBtn2 === 'week') {
+    } else if (selectBtn2 == 'week') {
       query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW();"  // 주별로 데이터를 필터링 (이번 주)
-    } else if (selectBtn2 === 'month') {
+    } else if (selectBtn2 == 'month') {
       query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW();" ; // 월별로 데이터를 필터링 (이번 달)
     }
     const [rows,fields] = await DB.query(query);
