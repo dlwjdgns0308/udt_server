@@ -28,11 +28,11 @@ app.post("/list/main",async (req, res) => {
 
 
     if (selectBtn2 === 'day') {
-      query += " WHERE created_at >= CURDATE() - INTERVAL 1 DAY"; // 일별로 데이터를 필터링 (지난 1일)
+      query += " WHERE created_at < DATE_ADD(NOW(),INTERVAL -1 DAY)"; // 일별로 데이터를 필터링 (지난 1일)
     } else if (selectBtn2 === 'week') {
-      query += " WHERE created_at >= CURDATE() - INTERVAL 7 DAY"; // 주별로 데이터를 필터링 (이번 주)
+      query += " WHERE created_at < DATE_ADD(NOW(),INTERVAL -7 DAY)"; // 주별로 데이터를 필터링 (이번 주)
     } else if (selectBtn2 === 'month') {
-      query += " WHERE created_at >= CURDATE() - INTERVAL 30 DAY"; // 월별로 데이터를 필터링 (이번 달)
+      query += " WHERE created_at < DATE_ADD(NOW(),INTERVAL -30 DAY)"; // 월별로 데이터를 필터링 (이번 달)
     }
     const [rows,fields] = await DB.query(query);
     
