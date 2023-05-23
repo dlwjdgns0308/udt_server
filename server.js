@@ -19,7 +19,7 @@ app.post("/list/main",async (req, res) => {
     const selectBtn1 = req.body.selectedButton1;
     const selectBtn2 = req.body.selectedButton2;
 
-    const query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
+    let query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
     if(selectBtn1 == 'latest'){
       query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
     }else{
