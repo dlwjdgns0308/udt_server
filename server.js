@@ -20,13 +20,13 @@ app.post("/list/main",async (req, res) => {
     const selectBtn2 = req.body.selectedButton2;
 
     let query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
-    const now = new Date();
+const now = new Date();
     if (selectBtn2 == 'day') {
-      query += " WHERE created_at BETWEEN DATE_ADD(?, INTERVAL -1 DAY ) AND ?;",[now,now]; // 일별로 데이터를 필터링 (지난 1일)
+      query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW()" // 일별로 데이터를 필터링 (지난 1일)
     } else if (selectBtn2 == 'week') {
-      query += " WHERE created_at BETWEEN DATE_ADD(?, INTERVAL -1 WEEK ) AND ?;",[now,now];  // 주별로 데이터를 필터링 (이번 주)
+      query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()"  // 주별로 데이터를 필터링 (이번 주)
     } else if (selectBtn2 == 'month') {
-      query += " WHERE created_at BETWEEN DATE_ADD(?, INTERVAL -1 MONTH ) AND ?;",[now,now]; // 월별로 데이터를 필터링 (이번 달)
+      query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW()" ; // 월별로 데이터를 필터링 (이번 달)
     }
 
     if(selectBtn1 == 'latest'){
