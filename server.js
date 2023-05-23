@@ -20,12 +20,6 @@ app.post("/list/main",async (req, res) => {
     const selectBtn2 = req.body.selectedButton2;
 
     let query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
-    if(selectBtn1 == 'latest'){
-      query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
-    }else{
-      query += " ORDER BY likecount DESC"; // 인기순으로 데이터 정렬
-    }
-
 
     if (selectBtn2 == 'day') {
       query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW();" // 일별로 데이터를 필터링 (지난 1일)
@@ -34,6 +28,15 @@ app.post("/list/main",async (req, res) => {
     } else if (selectBtn2 == 'month') {
       query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW();" ; // 월별로 데이터를 필터링 (이번 달)
     }
+    
+    if(selectBtn1 == 'latest'){
+      query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
+    }else{
+      query += " ORDER BY likecount DESC"; // 인기순으로 데이터 정렬
+    }
+
+
+   
     const [rows,fields] = await DB.query(query);
     
     res.send(rows);
