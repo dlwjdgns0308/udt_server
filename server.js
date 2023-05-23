@@ -30,11 +30,10 @@ app.post("/list/main",async (req, res) => {
     if (selectBtn2 === 'day') {
       query += " WHERE DATE(created_at) >= CURDATE() - INTERVAL 1 DAY"; // 일별로 데이터를 필터링 (지난 1일)
     } else if (selectBtn2 === 'week') {
-      query += " AND YEARWEEK(created_at) = YEARWEEK(CURDATE())"; // 주별로 데이터를 필터링 (이번 주)
+      query += " WHERE YEARWEEK(created_at) = YEARWEEK(CURDATE())"; // 주별로 데이터를 필터링 (이번 주)
     } else if (selectBtn2 === 'month') {
-      query += " AND YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE())"; // 월별로 데이터를 필터링 (이번 달)
+      query += " WHERE YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE())"; // 월별로 데이터를 필터링 (이번 달)
     }
-  
     const [rows,fields] = await DB.query(query);
     
     res.send(rows);
