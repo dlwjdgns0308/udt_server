@@ -124,6 +124,23 @@ app.post("/1/edit_content/start", async (req, res) => {
  
 });
 
+app.post('/api/like', async (req, res) => {
+  try {
+    const { category,user } = req.body; // 클라이언트에서 전송한 데이터 (게시물 ID 등)
+    console.log(req.body);
+
+    // 좋아요 정보를 데이터베이스에 저장하거나 업데이트하는 로직 구현
+    // ...
+
+    // 성공적으로 처리되었을 때 응답
+    res.status(200).json({ success: true });
+  } catch (error) {
+    // 에러 처리
+    console.error('Failed to process like request', error);
+    res.status(500).json({ success: false, error: 'Failed to process like request' });
+  }
+});
+
 
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   try{
