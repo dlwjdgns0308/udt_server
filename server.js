@@ -176,7 +176,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
     // DB占쎈퓠 占쎈쑓占쎌뵠占쎄숲 占쎄땜占쎌뿯
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0,message, level];
+    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
 
     console.log(rows);
