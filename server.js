@@ -124,6 +124,37 @@ app.post("/1/edit_content/start", async (req, res) => {
  
 });
 
+
+app.post("/content/start", async (req, res) => {
+  console.log(req.body)
+  const user = req.body.session.user.email;
+  const category = req.body.category;
+  
+  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
+  const [rows, fields] = await DB.query("SELECT user, category, uca FROM likecount WHERE uca=?", [category]);
+  console.log(rows);
+ 
+ 
+  if (rows2.length == 0){
+    creator = undefined
+  }else{
+    creator = rows2[0].creator;
+  }
+  console.log(user, category,  creator)
+  if( creator == undefined){
+    //�깉濡쒖슫 而⑦뀗痢�
+    res.status(200).send();
+  }else if( creator == user){
+    //湲곗〈�쑀���
+    res.status(201).send({content:rows,title:rows2});
+  }else{
+    //�떎瑜몄쑀���
+    console.log("fsfsdfdsfds")
+    res.status(300).send();
+  }
+ 
+});
+
 app.post('/api/like', async (req, res) => {
   try {
     const { category,user } = req.body; // 클라이언트에서 전송한 데이터 (게시물 ID 등)
