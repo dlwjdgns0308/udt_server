@@ -130,8 +130,8 @@ app.post("/content/start", async (req, res) => {
   console.log(req.body)
   const user = req.body.session.user.email;
   const category = req.body.category;
-  
-  const [rows, fields] = await DB.query("SELECT user, category, uca FROM likecount WHERE uca=?", [category]);
+  const uca =  user + category; 
+  const [rows, fields] = await DB.query("SELECT user, category, uca FROM likecount WHERE uca=?", [uca]);
   console.log(rows[0]);
  
  
