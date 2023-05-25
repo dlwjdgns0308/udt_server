@@ -94,6 +94,7 @@ const uploads = multer({});
 const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 const creater = undefined;
+const likecount = undefined;
 
 app.post("/1/edit_content/start", async (req, res) => {
   console.log(req.body)
@@ -130,25 +131,24 @@ app.post("/content/start", async (req, res) => {
   const user = req.body.session.user.email;
   const category = req.body.category;
   
-  const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
   const [rows, fields] = await DB.query("SELECT user, category, uca FROM likecount WHERE uca=?", [category]);
-  console.log(rows);
+  console.log(rows[0]);
  
  
-  if (rows2.length == 0){
-    creator = undefined
+  if (rows.length == 0){
+    likecount = undefined;
   }else{
-    creator = rows2[0].creator;
+    likecount = rows[0].user;
   }
   console.log(user, category,  creator)
-  if( creator == undefined){
-    //�깉濡쒖슫 而⑦뀗痢�
+  if( likecount == undefined){
+    //좋아요 안눌림
     res.status(200).send();
-  }else if( creator == user){
-    //湲곗〈�쑀���
-    res.status(201).send({content:rows,title:rows2});
+  }else if( likecount == user){
+    // 좋아요 눌려있음
+    res.status(201).send();
   }else{
-    //�떎瑜몄쑀���
+    //
     console.log("fsfsdfdsfds")
     res.status(300).send();
   }
