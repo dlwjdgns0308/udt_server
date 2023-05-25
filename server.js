@@ -138,9 +138,10 @@ app.post("/content/start", async (req, res) => {
   if (rows.length == 0){
     likecount = undefined;
   }else{
+    console.log(rows[0].user);
     likecount = rows[0].user;
   }
-  console.log(user, category,  creator)
+
   if( likecount == undefined){
     //좋아요 안눌림
     res.status(200).send();
