@@ -159,7 +159,7 @@ app.post('/api/like', async (req, res) => {
   try {
     const { category,user } = req.body; // 클라이언트에서 전송한 데이터 (게시물 ID 등)
     console.log(req.body);
-
+    const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,user+category]);
     // 좋아요 정보를 데이터베이스에 저장하거나 업데이트하는 로직 구현
     // ...
 
