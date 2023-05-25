@@ -94,7 +94,7 @@ const uploads = multer({});
 const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 const creater = undefined;
-const likecount = undefined;
+let likecount = undefined;
 
 app.post("/1/edit_content/start", async (req, res) => {
   console.log(req.body)
