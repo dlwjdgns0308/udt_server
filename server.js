@@ -158,7 +158,7 @@ app.post("/content/start", async (req, res) => {
 app.post('/api/like', async (req, res) => {
   try {
     const { category,user } = req.body; // 클라이언트에서 전송한 데이터 (게시물 ID 등)
- 
+    const uca =  user + category 
     console.log(req.body);
     const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,user]);
     const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
