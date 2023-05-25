@@ -79,7 +79,7 @@ app.use('/source', express.static('/home/ubuntu/source'))
 
 
 app.get("/content", async (req, res) => {
-    console.log(req.query.id);
+    console.log(req.query);
     const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
 
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
@@ -140,6 +140,8 @@ app.post('/api/like', async (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to process like request' });
   }
 });
+
+
 
 
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
@@ -213,7 +215,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const filePath = `${Path2}/${category}/${filename}`;
   // DB占쎈퓠 占쎈쑓占쎌뵠占쎄숲 占쎄땜占쎌뿯
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0];
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
