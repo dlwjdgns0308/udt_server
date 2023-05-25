@@ -161,7 +161,7 @@ app.post('/api/like', async (req, res) => {
     category = JSON.stringify(category);
     user = JSON.stringify(user);
     console.log(req.body);
-    const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,user+category]);
+    const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,user]);
     const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
     const like = rows2[0].likecount + 1;
 
