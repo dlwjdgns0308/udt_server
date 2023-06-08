@@ -176,7 +176,7 @@ app.post('/api/like', async (req, res) => {
       res.status(200).json();
     }else if(liked == true){
        // 좋아요 정보 삭제
-       const [rows, fields] = await DB.query("DELETE FROM category WHERE uca = ? ", [uca]);
+       const [rows, fields] = await DB.query("DELETE FROM likecount WHERE uca = ? ", [uca]);
       // 좋아요 수 증가
       const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
       const like = rows2[0].likecount - 1;
