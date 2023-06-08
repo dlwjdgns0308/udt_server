@@ -179,9 +179,10 @@ app.post('/api/like', async (req, res) => {
        const [rows, fields] = await DB.query("DELETE FROM likecount WHERE uca = ? ", [uca]);
       // 좋아요 수 증가
       const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
-      const likedd = rows2[0].likecount - 1;
+      const like = rows2[0].likecount - 1;
+      const [rows3, fields3]  = await DB.query('UPDATE category SET likecount= ? WHERE category = ?',[like,category]);
       res.status(201).json();
-    }const [rows3, fields3]  = await DB.query('UPDATE category SET likecount= ? WHERE category = ?',[likedd,category]);
+    }
    
   } catch (error) {
     // 에러 처리
