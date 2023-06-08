@@ -161,15 +161,27 @@ app.post('/api/like', async (req, res) => {
     const category = req.body.category.category;
     const user = req.body.category.user; // 클라이언트에서 전송한 데이터 (게시물 ID 등)
     const uca =  user + category; 
+    const liked = req.body.category.like;
     console.log(req.body);
-    const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,uca]);
-    const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
-    const like = rows2[0].likecount + 1;
-
-    const [rows3, fields3]  = await DB.query('UPDATE category SET likecount= ? WHERE category = ?',[like,category]);
+    if(liked == false){
+     // 좋아요 정보 추가
+      const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,uca]);
+       // 좋아요 수 증가
+      const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
+      const like = rows2[0].likecount + 1;
+  
+      const [rows3, fields3]  = await DB.query('UPDATE category SET likecount= ? WHERE category = ?',[like,category]);
+     
+      // 성공적으로 처리되었을 때 응답
+      res.status(200).json();
+    }else if(liked == true){
+       // 좋아요 정보 삭제
+       const [rows, fields] = await DB.query("DELETE FROM category WHERE uca = ? ", [uca]);
+      // 좋아요 수 증가
+      const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
+      const like = rows2[0].likecount - 1;
+    }const [rows3, fields3]  = await DB.query('UPDATE category SET likecount= ? WHERE category = ?',[like,category]);
    
-    // 성공적으로 처리되었을 때 응답
-    res.status(200).json({ success: true });
   } catch (error) {
     // 에러 처리
     console.error('Failed to process like request', error);
