@@ -180,6 +180,7 @@ app.post('/api/like', async (req, res) => {
       // 좋아요 수 증가
       const [rows2, fields2] = await DB.query("SELECT likecount FROM category WHERE category=?", [category]);
       const like = rows2[0].likecount - 1;
+      res.status(201).json();
     }const [rows3, fields3]  = await DB.query('UPDATE category SET likecount= ? WHERE category = ?',[like,category]);
    
   } catch (error) {
