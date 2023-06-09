@@ -213,9 +213,9 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const description = req.body.description;
     const title = req.body.title;
     const user = req.body.user;
-\
+
     const dir = `/home/ubuntu/source/${category}`;
-\
+
     
     // 디렉토리 중복확인
     if (!fs.existsSync(dir)) {
