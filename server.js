@@ -71,7 +71,22 @@ app.post("/list/mypagedel",async (req, res) => {
   if (fs.existsSync(dir)) {
     fs.rmdirSync(dir, { recursive: true });
   }
-  res.status(200).send('�꽦怨듭쟻�쑝濡� �뜲�씠�꽣瑜� �궘�젣�븯����뒿�땲�떎');
+  res.status(200).send();
+});
+
+
+app.post("/gameover",async (req, res) => {
+  console.log(req.body);
+  // const category = req.body.category;
+  // // const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
+  // const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
+  // const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
+  // const dir = `/home/ubuntu/source/${category}`;
+
+  // if (fs.existsSync(dir)) {
+  //   fs.rmdirSync(dir, { recursive: true });
+  }
+  res.status(200).send();
 });
 
 app.use('/source', express.static('/home/ubuntu/source'))
@@ -79,7 +94,7 @@ app.use('/source', express.static('/home/ubuntu/source'))
 
 
 app.get("/content", async (req, res) => {
-    console.log(req.query);
+   
     const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
 
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
@@ -97,7 +112,7 @@ const creator = undefined;
 let likecount = undefined;
 
 app.post("/1/edit_content/start", async (req, res) => {
-  console.log(req.body)
+
   const user = req.body.session.user.email;
   const category = req.body.category;
   
@@ -112,13 +127,13 @@ app.post("/1/edit_content/start", async (req, res) => {
   }
   console.log(user, category,  creator)
   if( creator == undefined){
-    //�깉濡쒖슫 而⑦뀗痢�
+    //占쎄퉱嚥≪뮇�뒲 ��뚢뫂��쀯㎘占�
     res.status(200).send();
   }else if( creator == user){
-    //湲곗〈�쑀���
+    //疫꿸퀣��덌옙���占쏙옙占�
     res.status(201).send({content:rows,title:rows2});
   }else{
-    //�떎瑜몄쑀���
+    //占쎈뼄�몴紐꾩��占쏙옙占�
     console.log("fsfsdfdsfds")
     res.status(300).send();
   }
@@ -127,7 +142,7 @@ app.post("/1/edit_content/start", async (req, res) => {
 
 
 app.post("/content/start", async (req, res) => {
-  console.log(req.body)
+
   const user = req.body.session.user.email;
   const category = req.body.category;
   const uca =  user + category; 
@@ -146,7 +161,7 @@ app.post("/content/start", async (req, res) => {
     //좋아요 안눌림
     res.status(200).send();
   }else if( likecount == user){
-    // 좋아요 눌려있음
+    //좋아요 눌려있음
     res.status(201).send();
   }else{
     //
@@ -159,10 +174,10 @@ app.post("/content/start", async (req, res) => {
 app.post('/api/like', async (req, res) => {
   try {
     const category = req.body.category.category;
-    const user = req.body.category.user; // 클라이언트에서 전송한 데이터 (게시물 ID 등)
+    const user = req.body.category.user; //  클라이언트에서 전송한 데이터 (게시물 ID 등)
     const uca =  user + category; 
     const liked = req.body.category.like;
-    console.log(req.body);
+  
     if(liked == false){
      // 좋아요 정보 추가
       const [rows, fields] = await DB.query("INSERT INTO likecount (user, category, uca) VALUES (?, ?, ?) ", [user,category,uca]);
@@ -200,16 +215,16 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const description = req.body.description;
     const title = req.body.title;
     const user = req.body.user;
-    console.log(user);
+\
     const dir = `/home/ubuntu/source/${category}`;
-    console.log(dir,category)
+\
     
-    // 占쎈쨨占쎈쐭揶쏉옙 鈺곕똻�삺占쎈릭筌욑옙 占쎈륫占쎌몵筌롳옙 占쎈쨨占쎈쐭 占쎄문占쎄쉐
+    // 디렉토리 중복확인
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
     
-    // 占쎈솁占쎌뵬 占쏙옙占쏙옙�삢
+    // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
     for (let i = 0; i < req.files.length; i++) {
       const file = req.files[i];
       const filename = file.originalname;
@@ -225,14 +240,14 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const filePath = `${Path2}/${category}/${filename}`;
     const message = 
     "잘못 클릭하신거죠? 다시 한 번 도전해보세요!,이번 레벨은 좀 까다로웠나봐요. 하지만 다음에는 더 재밌는 도전이 준비되어 있을 거에요.,오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!,초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.,이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.,이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!,이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!,숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?,이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!,이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.";
-    const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
-    // DB占쎈퓠 占쎈쑓占쎌뵠占쎄숲 占쎄땜占쎌뿯
+    const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설",
+    // DB에 저장하기
     const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
+    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '�썝', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
 
     console.log(rows);
-    res.send('�꽦怨�');
+    res.send('성공');
   }catch(error){
     res.status(405).send(error);
   }
@@ -244,12 +259,12 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const dir = `/home/ubuntu/source/${category}`;
   console.log(dir,category)
   
-  // 占쎈쨨占쎈쐭揶쏉옙 鈺곕똻�삺占쎈릭筌욑옙 占쎈륫占쎌몵筌롳옙 占쎈쨨占쎈쐭 占쎄문占쎄쉐
+  // �뜝�럥夷ⓨ뜝�럥�맠�뤆�룊�삕 �댖怨뺣샍占쎌궨�뜝�럥由�嶺뚯쉻�삕 �뜝�럥瑜ュ뜝�럩紐든춯濡녹삕 �뜝�럥夷ⓨ뜝�럥�맠 �뜝�럡臾멨뜝�럡�뎽
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
   
-  // 占쎈솁占쎌뵬 占쏙옙占쏙옙�삢
+  // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
   for (let i = 0; i < req.files.length; i++) {
     const file = req.files[i];
     const filename = file.originalname;
@@ -263,13 +278,13 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const filename = file.originalname;
   const Path2 = 'http://43.201.68.150:3001/source/'
   const filePath = `${Path2}/${category}/${filename}`;
-  // DB占쎈퓠 占쎈쑓占쎌뵠占쎄숲 占쎄땜占쎌뿯
+  // DB�뜝�럥�뱺 �뜝�럥�몥�뜝�럩逾졾뜝�럡�댉 �뜝�럡�븳�뜝�럩肉�
   const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
-  res.send('泥섎━�릺�뿀�뒿�땲�떎');
+  res.send('筌ｌ꼶�봺占쎈┷占쎈��占쎈뮸占쎈빍占쎈뼄');
 });
 
   
@@ -322,7 +337,7 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
       // const file = req.files[i];
       // const name = req.body.name[i];
       // const filePath = `${dir}/${name}`;
-      // // 占쎈땾占쎌젟�뜎�눖�봺 占쎄퐫疫뀐옙
+      // // �뜝�럥�빢�뜝�럩�젧占쎈쐩占쎈닑占쎈뉴 �뜝�럡�맜�뼨��먯삕
       const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
       // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
       // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
