@@ -77,11 +77,15 @@ app.post("/list/mypagedel",async (req, res) => {
 
 app.post("/gameover",async (req, res) => {
   console.log(req.body);
-  // const category = req.body.category;
-  // // const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
-  // const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
-  // const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
-  // const dir = `/home/ubuntu/source/${category}`;
+  const name = req.body.session.name;
+  const level = req.body.progressBarLevel;
+  const levelname = req.body.levelName;
+  const score = req.body.score;
+  const category = req.body.category;
+  const image = req.body.session.image;
+
+ // 랭킹 정보 추가
+ const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image) VALUES (?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image]);
 
   
   res.status(200).send();
@@ -257,7 +261,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const dir = `/home/ubuntu/source/${category}`;
   console.log(dir,category)
   
-  // �뜝�럥夷ⓨ뜝�럥�맠�뤆�룊�삕 �댖怨뺣샍占쎌궨�뜝�럥由�嶺뚯쉻�삕 �뜝�럥瑜ュ뜝�럩紐든춯濡녹삕 �뜝�럥夷ⓨ뜝�럥�맠 �뜝�럡臾멨뜝�럡�뎽
+  // 디렉토리 중복확인
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
@@ -282,7 +286,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   const [rows, fields] = await DB.query(sql, values);
 
   console.log(rows);
-  res.send('筌ｌ꼶�봺占쎈┷占쎈��占쎈뮸占쎈빍占쎈뼄');
+  res.send();
 });
 
   
