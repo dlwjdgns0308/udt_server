@@ -83,7 +83,7 @@ app.post("/gameover",async (req, res) => {
   // const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
   // const dir = `/home/ubuntu/source/${category}`;
 
- 
+  
   res.status(200).send();
 });
 
