@@ -46,7 +46,7 @@ app.post("/lank",async (req, res) => {
   console.log(req.body)
   const selectBtn = req.body.selectedButton;
 
-  let query = "SELECT  category, image, name, level, score  FROM lanking";
+  let query = "SELECT  category, image, name, level,levelname, score  FROM lanking";
 
  
   const [rows,fields] = await DB.query(query);
