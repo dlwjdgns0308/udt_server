@@ -78,14 +78,17 @@ app.post("/list/mypagedel",async (req, res) => {
 app.post("/gameover",async (req, res) => {
   console.log(req.body);
   const name = req.body.session.name;
+  const email = req.body.session.email;
   const level = req.body.progressBarLevel;
   const levelname = req.body.levelName;
   const score = req.body.score;
   const category = req.body.category;
   const image = req.body.session.image;
-
+  const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE email = ? ",[email]);
+ 
+ 
  // 랭킹 정보 추가
- const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image) VALUES (?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image]);
+ const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image,email) VALUES (?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email]);
 
   
   res.status(200).send();
