@@ -84,13 +84,17 @@ app.post("/gameover",async (req, res) => {
   const score = req.body.score;
   const category = req.body.category;
   const image = req.body.session.image;
-  const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE email = ? ",[email]);
- 
- 
- // 랭킹 정보 추가
- const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image,email) VALUES (?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email]);
+  const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
+
+  if(score > rows2[0].score){
+    // 랭킹 정보 추가
+    const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image,email) VALUES (?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email]);
 
   
+  }
+ 
+ 
+
   res.status(200).send();
 });
 
