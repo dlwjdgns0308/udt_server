@@ -15,43 +15,46 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post("/list/main",async (req, res) => {
-    console.log(req.body)
-    const selectBtn1 = req.body.selectedButton1;
-    const selectBtn2 = req.body.selectedButton2;
+  console.log(req.body)
+  const selectBtn1 = req.body.selectedButton1;
+  const selectBtn2 = req.body.selectedButton2;
 
-    let query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
+  let query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
 const now = new Date();
-    if (selectBtn2 == 'day') {
-      query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW()" // 일별로 데이터를 필터링 (지난 1일)
-    } else if (selectBtn2 == 'week') {
-      query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()"  // 주별로 데이터를 필터링 (이번 주)
-    } else if (selectBtn2 == 'month') {
-      query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW()" ; // 월별로 데이터를 필터링 (이번 달)
-    }
+  if (selectBtn2 == 'day') {
+    query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW()" // 일별로 데이터를 필터링 (지난 1일)
+  } else if (selectBtn2 == 'week') {
+    query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()"  // 주별로 데이터를 필터링 (이번 주)
+  } else if (selectBtn2 == 'month') {
+    query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW()" ; // 월별로 데이터를 필터링 (이번 달)
+  }
 
-    if(selectBtn1 == 'latest'){
-      query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
-    }else{
-      query += " ORDER BY likecount DESC"; // 인기순으로 데이터 정렬
-    }
+  if(selectBtn1 == 'latest'){
+    query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
+  }else{
+    query += " ORDER BY likecount DESC"; // 인기순으로 데이터 정렬
+  }
 
 
-   
-    const [rows,fields] = await DB.query(query);
-    
-    res.send(rows);
+ 
+  const [rows,fields] = await DB.query(query);
+  
+  res.send(rows);
 });
 
-// app.get("/list/main", async (req, res) => {
-//   console.log(req.query.id);
-//   const [rows,fields] = await DB.query("SELECT  user_id, user_login,user_name,profile_image_url, view_count, created_at FROM twitch_user_list WHERE user_id = ? ORDER BY view_count DESC Limit 1",[req.query.id]);
-//   const [rows2,fields2] = await DB.query("SELECT  user_id,user_name,created_at,creator_id,creator_name,run_time,video_url,thumbnail,title,view_count,game_id FROM t_clips WHERE user_id = ? ORDER BY view_count DESC Limit 5",[req.query.id]);   
-//   const [rows3,fields3] = await DB.query("SELECT  user_id,user_login,user_name,title,created_at,url,thumbnail,view_count,run_time FROM t_videos WHERE user_id = ? ORDER BY created_at desc Limit 10",[req.query.id]);   
+app.post("/lank",async (req, res) => {
+  console.log(req.body)
+  const selectBtn = req.body.selectedButton;
+
+  let query = "SELECT  category, image, name, level, score  FROM lanking";
+
+ 
+  const [rows,fields] = await DB.query(query);
   
-//   console.log(rows);
-  
-//   res.send({user:rows,clip:rows2,video:rows3});
-// });
+  res.send(rows);
+});
+
+
 
 
 app.post("/list/mypage",async (req, res) => {
@@ -74,6 +77,7 @@ app.post("/list/mypagedel",async (req, res) => {
   res.status(200).send();
 });
 
+app.post
 
 app.post("/gameover",async (req, res) => {
   console.log(req.body);
