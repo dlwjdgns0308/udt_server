@@ -77,7 +77,7 @@ app.post("/list/mypagedel",async (req, res) => {
   res.status(200).send();
 });
 
-app.post
+
 
 app.post("/gameover",async (req, res) => {
   console.log(req.body);
@@ -88,13 +88,15 @@ app.post("/gameover",async (req, res) => {
   const score = req.body.score;
   const category = req.body.category;
   const image = req.body.session.image;
+  const [rows,fields] = await DB.query("SELECT  title FROM category WHERE category=? ",[category]);
+  const title = rows[0].title;
   const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
 
   if(score > rows2[0].score){
     // 기존 랭킹 제거
     const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE category = ? AND email=? ",[category,email]);
     // 랭킹 정보 추가
-    const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image,email) VALUES (?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email]);
+    const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image,email) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email, title]);
 
   
   }
