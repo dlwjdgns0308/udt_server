@@ -43,8 +43,7 @@ const now = new Date();
 });
 
 app.post("/lank",async (req, res) => {
-  console.log(req.body)
-  const selectBtn = req.body.selectedButton;
+
 
   let query = "SELECT  category, image, name, level,levelname, score  FROM lanking ORDER BY score DESC";
 
@@ -93,7 +92,7 @@ app.post("/gameover",async (req, res) => {
   const title = rows[0].title;
   console.log(rows)
   const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
-  if(rows2.length > 1){
+  if(rows2.length != 0){
     top = rows2[0].score;
   }
   if(score > top){
