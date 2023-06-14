@@ -92,7 +92,7 @@ app.post("/gameover",async (req, res) => {
   const title = rows[0].title;
   console.log(rows)
   const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
-  if(rows2.length != 0){
+  if(rows2.length > 1){
     top = rows2[0].score;
   }
   if(score > top){
