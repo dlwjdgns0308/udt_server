@@ -45,7 +45,7 @@ const now = new Date();
 app.post("/lank",async (req, res) => {
 
 
-  let query = "SELECT  category, image, name, level,levelname, score  FROM lanking ORDER BY score DESC";
+  let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC";
 
  
   const [rows,fields] = await DB.query(query);
