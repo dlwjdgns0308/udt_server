@@ -99,7 +99,7 @@ app.post("/gameover",async (req, res) => {
     // 기존 랭킹 제거
     const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE category = ? AND email=? ",[category,email]);
     // 랭킹 정보 추가
-    const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image,email) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email, title]);
+    const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image, email, title) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email, title]);
 
   
   }
