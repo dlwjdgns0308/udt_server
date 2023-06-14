@@ -91,6 +91,7 @@ app.post("/gameover",async (req, res) => {
   const image = req.body.session.image;
   const [rows,fields] = await DB.query("SELECT  title FROM category WHERE category=? ",[category]);
   const title = rows[0].title;
+  console.log(rows)
   const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
   if(rows2[0].length > 0){
     top = rows2[0].score;
