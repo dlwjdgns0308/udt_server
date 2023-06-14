@@ -86,13 +86,16 @@ app.post("/gameover",async (req, res) => {
   const level = req.body.progressBarLevel;
   const levelname = req.body.levelName;
   const score = req.body.score;
+  const top = 0;
   const category = req.body.category;
   const image = req.body.session.image;
   const [rows,fields] = await DB.query("SELECT  title FROM category WHERE category=? ",[category]);
   const title = rows[0].title;
   const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
-
-  if(score > rows2[0].score){
+  if(rows2[0].length > 0){
+    top = rows2[0].score;
+  }
+  if(score > top){
     // 기존 랭킹 제거
     const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE category = ? AND email=? ",[category,email]);
     // 랭킹 정보 추가
