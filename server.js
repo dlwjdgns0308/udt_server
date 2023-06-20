@@ -43,7 +43,7 @@ const now = new Date();
 });
 
 app.post("/lank",async (req, res) => {
-  const category = res.body;
+  const category = req.body.id;
   console.log(category);
   let query;
   if(category == undefined){
