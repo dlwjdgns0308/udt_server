@@ -45,10 +45,11 @@ const now = new Date();
 app.post("/lank",async (req, res) => {
   const category = res.body;
   console.log(category);
+  let query;
   if(category == undefined){
-    let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC";
+    query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC";
   }else{
-     let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking WHERE category=? ORDER BY score DESC"[category.id];
+    query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking WHERE category=? ORDER BY score DESC"[category.id];
   }
 
  
