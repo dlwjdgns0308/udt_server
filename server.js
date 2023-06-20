@@ -45,11 +45,10 @@ const now = new Date();
 app.post("/lank",async (req, res) => {
   const category = req.body.id;
   console.log(category);
- 
-  if(category == undefined){
-    const [rows,fields] = await DB.query("SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC  ");
-  }else{
-    const [rows,fields] = await DB.query("SELECT  category, image, name, level,levelname, score, title  FROM lanking WHERE category = ? ORDER BY score DESC  ",[category]);
+ const [rows,fields] = await DB.query("SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC  ");
+  if(category != undefined){
+    [rows,fields] = await DB.query("SELECT  category, image, name, level,levelname, score, title  FROM lanking WHERE category = ? ORDER BY score DESC  ",[category]);
+    
   }
 
  
@@ -57,7 +56,7 @@ app.post("/lank",async (req, res) => {
  
   
   
-  res.status(200).send();
+  res.send(rows);
 });
 
 
