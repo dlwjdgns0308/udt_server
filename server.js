@@ -43,7 +43,8 @@ const now = new Date();
 });
 
 app.post("/lank",async (req, res) => {
-
+  const category = res.body.id;
+  console.log(category);
 
   let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC";
 
