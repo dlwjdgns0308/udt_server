@@ -46,7 +46,7 @@ app.post("/lank",async (req, res) => {
   const category = req.body.id;
   console.log(category);
   let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ";
-  if(category != undefined){
+  if(category.length != 0){
     query += `WHERE category = '${category}'`;
     
   }
