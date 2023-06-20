@@ -57,7 +57,7 @@ app.post("/lank",async (req, res) => {
  
   
   
-  res.send(rows);
+  res.status(200).send();
 });
 
 
