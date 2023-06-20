@@ -49,7 +49,7 @@ app.post("/lank",async (req, res) => {
   if(category == undefined){
     query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC";
   }else{
-    query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking WHERE category=? ORDER BY score DESC"[category.id];
+    query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking WHERE category=? ORDER BY score DESC",[category];
   }
 
  
