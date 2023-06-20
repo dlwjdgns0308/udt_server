@@ -47,7 +47,7 @@ app.post("/lank",async (req, res) => {
   console.log(category);
   let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ORDER BY score DESC ";
   if(category != undefined){
-    query += "WHERE category = ?",[category];
+    query += `WHERE category = ${category}`;
     
   }
 
