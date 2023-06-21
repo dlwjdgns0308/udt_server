@@ -33,7 +33,7 @@ const now = new Date();
     query += "WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR ) AND NOW()"
   }
   if (search != ''){
-    query += `AND title LIKE '%${search}%'`
+    query += ` AND title LIKE '%${search}%'`
   }
   if(selectBtn1 == 'latest'){
     query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
