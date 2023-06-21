@@ -32,7 +32,7 @@ const now = new Date();
   } else if (selectBtn2 == 'all'){
     query += "WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR ) AND NOW()"
   }
-  if (search != 'all'){
+  if (search != ''){
     query += `AND title LIKE '%${search}%'`
   }
   if(selectBtn1 == 'latest'){
