@@ -18,17 +18,23 @@ app.post("/list/main",async (req, res) => {
   console.log(req.body)
   const selectBtn1 = req.body.selectedButton1;
   const selectBtn2 = req.body.selectedButton2;
-
-  let query = "SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category";
+  const search = req.body.search;
+  let query = "SELECT  * FROM category";
 const now = new Date();
+
+ 
   if (selectBtn2 == 'day') {
     query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 DAY ) AND NOW()" // 일별로 데이터를 필터링 (지난 1일)
   } else if (selectBtn2 == 'week') {
     query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()"  // 주별로 데이터를 필터링 (이번 주)
   } else if (selectBtn2 == 'month') {
     query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW()" ; // 월별로 데이터를 필터링 (이번 달)
+  } else if (selectBtn2 == 'all'){
+    query += "WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR ) AND NOW()"
   }
-
+  if (search != 'all'){
+    query += `AND title LIKE '%${search}%'`
+  }
   if(selectBtn1 == 'latest'){
     query += " ORDER BY created_at DESC"; // 최신순으로 데이터 정렬
   }else{
@@ -42,6 +48,10 @@ const now = new Date();
   res.send(rows);
 });
 
+app.post("/search",async (req,res) => {
+const query = req.body.title;
+const [rows,fields] = await DB.query(`SELECT * FROM category WHERE title LIKE '%${query}%'`);
+});
 app.post("/lank",async (req, res) => {
   const category = req.body.id;
   console.log(category);
