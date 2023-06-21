@@ -30,7 +30,7 @@ const now = new Date();
   } else if (selectBtn2 == 'month') {
     query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH ) AND NOW()" ; // 월별로 데이터를 필터링 (이번 달)
   } else if (selectBtn2 == 'all'){
-    query += "WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR ) AND NOW()"
+    query += " WHERE created_at BETWEEN DATE_ADD(NOW(), INTERVAL -1 YEAR ) AND NOW()"
   }
   if (search != ''){
     query += ` AND title LIKE '%${search}%'`
