@@ -157,7 +157,7 @@ app.post("/1/edit_content/start", async (req, res) => {
  
  
   if (rows2.length == 0){
-    creator = undefined
+   
   }else{
     creator = rows2[0].creator;
   }
