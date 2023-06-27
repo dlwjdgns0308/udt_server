@@ -8,8 +8,15 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const { error } = require("console");
+require('dotenv').config();
 
 
+// AWS 계정 자격 증명 설정
+AWS.config.update({
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.S3_REGION
+});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());

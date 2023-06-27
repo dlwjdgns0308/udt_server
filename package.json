@@ -1,10 +1,12 @@
 {
   "dependencies": {
     "@callowcreation/basic-twitch-oauth": "^1.0.12",
+    "aws-sdk": "^2.1405.0",
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "gapi": "^0.0.3",

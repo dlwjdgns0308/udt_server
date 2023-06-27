@@ -1,9 +1,10 @@
 var mysql = require('mysql2/promise');
+require('dotenv').config();
 const db = mysql.createPool({
-    host : 'svc.sel4.cloudtype.app',
+    host : process.env.HOST,
     port: 31405,
     user : 'root',
-    password : '0308',
+    password : process.env.PASSWORD,
     database : 'udtown'
 });
 
