@@ -8,6 +8,8 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const { error } = require("console");
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
 require('dotenv').config();
 
 
@@ -15,38 +17,8 @@ require('dotenv').config();
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: process.env.S3_REGION
+  region: process.env.SECRET_ACCESS_KEY
 });
-
-
-// S3 객체 생성
-const s3 = new AWS.S3();
-
-// 새로운 폴더 생성 및 이미지 파일 업로드 함수
-function uploadImageToS3(folderName, imageName, imagePath) {
-  // S3에 업로드할 파일 경로 설정
-  const s3Params = {
-    Bucket: 'YOUR_S3_BUCKET_NAME',
-    Key: folderName + '/' + imageName, // 폴더명/이미지파일명 형태로 경로 설정
-    Body: fs.readFileSync(imagePath) // 이미지 파일을 읽어와서 Body에 설정
-  };
-
-  // S3에 파일 업로드
-  s3.upload(s3Params, function(err, data) {
-    if (err) {
-      console.log('S3 업로드 에러:', err);
-    } else {
-      console.log('S3에 이미지 업로드 성공:', data.Location);
-    }
-  });
-}
-
-// 새로운 폴더명과 업로드할 이미지 파일 정보 설정
-const folderName = 'new_folder';
-const imageName = 'example.jpg';
-const imagePath = 'path/to/example.jpg';
-
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -282,51 +254,82 @@ app.post('/api/like', async (req, res) => {
 
 
 
-// S3 객체 생성
-const s3 = new AWS.S3();
-
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
-  try {
+  try{
     const category = req.body.category;
     const description = req.body.description;
     const title = req.body.title;
     const user = req.body.user;
 
-    // 이미지 파일 업로드 함수
-    async function uploadImageToS3(file, folderName) {
-      const filename = file.originalname;
+    const dir = `/home/ubuntu/source/${category}`;
 
-      // S3에 업로드할 파일 경로 설정
-      const s3Params = {
-        Bucket: 'YOUR_S3_BUCKET_NAME',
-        Key: `${folderName}/${filename}`, // 폴더명/이미지파일명 형태로 경로 설정
-        Body: file.buffer // 이미지 파일의 내용을 Body에 설정
-      };
-
-      // S3에 파일 업로드
-      await s3.upload(s3Params).promise();
+    
+    // 디렉토리 중복확인
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
     }
-
-    // 이미지 파일을 S3에 업로드
+    
+    // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
     for (let i = 0; i < req.files.length; i++) {
       const file = req.files[i];
-      await uploadImageToS3(file, category);
+      const filename = file.originalname;
+      const filePath = `${dir}/${filename}`;
+      const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+      const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
+      const [rows, fields] = await DB.query(sql, values);
+      fs.writeFileSync(filePath, file.buffer);
     }
-
     const file = req.files[0];
     const filename = file.originalname;
-    const filePath = `http://udtowns3.s3.amazonaws.com/${category}/${filename}`;
-
+    const Path2 = 'http://43.201.68.150:3001/source/'
+    const filePath = `${Path2}/${category}/${filename}`;
+    const message = 
+    "잘못 클릭하신거죠? 다시 한 번 도전해보세요!,이번 레벨은 좀 까다로웠나봐요. 하지만 다음에는 더 재밌는 도전이 준비되어 있을 거에요.,오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!,초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.,이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.,이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!,이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!,숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?,이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!,이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.";
+    const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
     // DB에 저장하기
-    const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    const values = [`./content/${category}`, description, category, file.originalname, title, filePath, user, datetime, '원', 0];
+    const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount,message,level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
 
     console.log(rows);
     res.send('성공');
-  } catch (error) {
+  }catch(error){
     res.status(405).send(error);
   }
+ 
+  const category = req.body.category;
+  const description = req.body.description;
+  const title = req.body.title;
+  const user = req.body.user;
+  const dir = `/home/ubuntu/source/${category}`;
+  console.log(dir,category)
+  
+  // 디렉토리 중복확인
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  
+  // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
+  for (let i = 0; i < req.files.length; i++) {
+    const file = req.files[i];
+    const filename = file.originalname;
+    const filePath = `${dir}/${filename}`;
+    const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+    const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
+    const [rows, fields] = await DB.query(sql, values);
+    fs.writeFileSync(filePath, file.buffer);
+  }
+  const file = req.files[0];
+  const filename = file.originalname;
+  const Path2 = 'http://43.201.68.150:3001/source/'
+  const filePath = `${Path2}/${category}/${filename}`;
+  // DB�뜝�럥�뱺 �뜝�럥�몥�뜝�럩逾졾뜝�럡�댉 �뜝�럡�븳�뜝�럩肉�
+  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
+  const [rows, fields] = await DB.query(sql, values);
+
+  console.log(rows);
+  res.send();
 });
 
   
