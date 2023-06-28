@@ -150,7 +150,7 @@ app.get("/content", async (req, res) => {
   });
 
 
-const uploads = multer({});
+
 const date = new Date();
 const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 const creator = undefined;
@@ -252,7 +252,7 @@ app.post('/api/like', async (req, res) => {
 });
 
 
-
+const uploads = multer({ dest: 'data/' });
 
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   try{
@@ -261,23 +261,46 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const title = req.body.title;
     const user = req.body.user;
 
-    const dir = `/home/ubuntu/source/${category}`;
+   
+    const folderName = `${category}/`;
+    const s3Params = {
+      Bucket: 'udtowns3',
+      Key: folderName
+    };
+
+    s3.putObject(s3Params, (err, data) => {
+      if (err) {
+        console.error('Failed to create folder in S3:', err);
+      } else {
+        console.log('Folder created in S3:', folderName);
+      }
+    });
 
     
-    // 디렉토리 중복확인
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
+  
     
     // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
     for (let i = 0; i < req.files.length; i++) {
       const file = req.files[i];
       const filename = file.originalname;
-      const filePath = `${dir}/${filename}`;
-      const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-      const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
-      const [rows, fields] = await DB.query(sql, values);
-      fs.writeFileSync(filePath, file.buffer);
+      const uploadParams = {
+        Bucket: 'udtowns3',
+        Key: folderName + file.originalname,
+        Body: file.buffer
+      };
+      s3.upload(uploadParams, (err, data) => {
+      if (err) {
+        console.error('S3 upload failed:', err);
+      } else {
+       
+      }
+    });
+    const imageUrl = data.Location;
+
+    // MySQL에 이미지 URL 저장
+    const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+    const values = [`${category}`, imageUrl, filename, null,"0"];
+    const [rows, fields] = await DB.query(sql, values);
     }
     const file = req.files[0];
     const filename = file.originalname;
