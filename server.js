@@ -15,7 +15,7 @@ require('dotenv').config();
 const s3 = new aws.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
-  region: process.env.SECRET_ACCESS_KEY
+  region: process.env.S3_REGION
 });
 // AWS 계정 자격 증명 설정
 
@@ -252,60 +252,60 @@ app.post('/api/like', async (req, res) => {
 });
 
 
-const uploads = multer({ dest: 'data/' });
-
+const uploads = multer({});
+const iconv = require('iconv-lite');
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
-  try{
+  try {
     const category = req.body.category;
     const description = req.body.description;
     const title = req.body.title;
     const user = req.body.user;
+    const folderName = `data/${category}/`;
 
-   
-    const folderName = `${category}/`;
-    const s3Params = {
+    const params = {
       Bucket: 'udtowns3',
-      Key: folderName
+      Key: folderName, // 폴더 이름을 포함한 객체 키
+      Body: '', // 폴더를 만들기 위해 빈 본문 사용
     };
 
-    s3.putObject(s3Params, (err, data) => {
+    s3.upload(params, async (err, data) => {
       if (err) {
-        console.error('Failed to create folder in S3:', err);
+        console.error(err);
+        res.status(500).send('폴더 만들기 실패');
       } else {
-        console.log('Folder created in S3:', folderName);
+        console.log('폴더가 성공적으로 만들어졌습니다.');
+
+        // 폴더안에 이미지 파일 저장하기
+        for (let i = 0; i < req.files.length; i++) {
+          const file = req.files[i];
+          const filename = Buffer.from(file.originalname, 'latin1').toString('utf8')
+          
+          const uploadParams = {
+            Bucket: 'udtowns3',
+            Key: folderName + filename,
+            Body: file.buffer,
+          };
+          const imageUrl = data.Location +filename;
+          try {
+            await s3.upload(uploadParams).promise();
+               // // MySQL에 이미지 URL 저장
+            const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+            const values = [`${category}`, imageUrl, filename, null,"0"];
+            const [rows, fields] = await DB.query(sql, values);
+            console.log(`${filename} 업로드 완료`);
+          } catch (error) {
+            console.error(`${filename} 업로드 실패:`, error);
+          }
+        }
+
+        res.status(200).send('파일 업로드가 완료되었습니다.');
       }
     });
 
-    
-  
-    
-    // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
-    for (let i = 0; i < req.files.length; i++) {
-      const file = req.files[i];
-      const filename = file.originalname;
-      const uploadParams = {
-        Bucket: 'udtowns3',
-        Key: folderName + file.originalname,
-        Body: file.buffer
-      };
-      s3.upload(uploadParams, (err, data) => {
-      if (err) {
-        console.error('S3 upload failed:', err);
-      } else {
-       
-      }
-    });
-    const imageUrl = data.Location;
-
-    // MySQL에 이미지 URL 저장
-    const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-    const values = [`${category}`, imageUrl, filename, null,"0"];
-    const [rows, fields] = await DB.query(sql, values);
-    }
     const file = req.files[0];
     const filename = file.originalname;
-    const Path2 = 'http://43.201.68.150:3001/source/'
-    const filePath = `${Path2}/${category}/${filename}`;
+
+    const filePath = `https://udtowns3.s3.ap-northeast-2.amazonaws.com/data/${category}/${filename}`;
     const message = 
     "잘못 클릭하신거죠? 다시 한 번 도전해보세요!,이번 레벨은 좀 까다로웠나봐요. 하지만 다음에는 더 재밌는 도전이 준비되어 있을 거에요.,오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!,초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.,이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.,이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!,이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!,숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?,이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!,이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.";
     const level = "초보자,학습자,수련생,전문가,베테랑,스페셜리스트,고수,마스터,거장,대가,전설";
@@ -315,44 +315,44 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const [rows, fields] = await DB.query(sql, values);
 
     console.log(rows);
-    res.send('성공');
-  }catch(error){
-    res.status(405).send(error);
-  }
  
-  const category = req.body.category;
-  const description = req.body.description;
-  const title = req.body.title;
-  const user = req.body.user;
-  const dir = `/home/ubuntu/source/${category}`;
-  console.log(dir,category)
-  
-  // 디렉토리 중복확인
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-  }
-  
-  // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
-  for (let i = 0; i < req.files.length; i++) {
-    const file = req.files[i];
-    const filename = file.originalname;
-    const filePath = `${dir}/${filename}`;
-    const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-    const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
-    const [rows, fields] = await DB.query(sql, values);
-    fs.writeFileSync(filePath, file.buffer);
-  }
-  const file = req.files[0];
-  const filename = file.originalname;
-  const Path2 = 'http://43.201.68.150:3001/source/'
-  const filePath = `${Path2}/${category}/${filename}`;
-  // DB�뜝�럥�뱺 �뜝�럥�몥�뜝�럩逾졾뜝�럡�댉 �뜝�럡�븳�뜝�럩肉�
-  const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
-  const [rows, fields] = await DB.query(sql, values);
+   }catch(error){
 
-  console.log(rows);
-  res.send();
+   }
+ 
+  // const category = req.body.category;
+  // const description = req.body.description;
+  // const title = req.body.title;
+  // const user = req.body.user;
+  // const dir = `/home/ubuntu/source/${category}`;
+  // console.log(dir,category)
+  
+  // // 디렉토리 중복확인
+  // if (!fs.existsSync(dir)) {
+  //   fs.mkdirSync(dir);
+  // }
+  
+  // // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
+  // for (let i = 0; i < req.files.length; i++) {
+  //   const file = req.files[i];
+  //   const filename = file.originalname;
+  //   const filePath = `${dir}/${filename}`;
+  //   const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+  //   const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
+  //   const [rows, fields] = await DB.query(sql, values);
+  //   fs.writeFileSync(filePath, file.buffer);
+  // }
+  // const file = req.files[0];
+  // const filename = file.originalname;
+  // const Path2 = 'http://43.201.68.150:3001/source/'
+  // const filePath = `${Path2}/${category}/${filename}`;
+  // // DB�뜝�럥�뱺 �뜝�럥�몥�뜝�럩逾졾뜝�럡�댉 �뜝�럡�븳�뜝�럩肉�
+  // const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  // const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
+  // const [rows, fields] = await DB.query(sql, values);
+
+  // console.log(rows);
+  // res.send();
 });
 
   
