@@ -8,17 +8,17 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const { error } = require("console");
-const AWS = require('aws-sdk');
+const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 require('dotenv').config();
 
-
-// AWS 계정 자격 증명 설정
-AWS.config.update({
+const s3 = new aws.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   region: process.env.SECRET_ACCESS_KEY
 });
+// AWS 계정 자격 증명 설정
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
