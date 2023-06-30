@@ -22,7 +22,7 @@ const s3 = new aws.S3({
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.options('*', cors()) // include before other routes
+
 app.post("/list/main",async (req, res) => {
   console.log(req.body)
   const selectBtn1 = req.body.selectedButton1;
@@ -53,7 +53,7 @@ const now = new Date();
 
  
   const [rows,fields] = await DB.query(query);
-  
+  res.header("Access-Control-Allow-Origin", "*");
   res.send(rows);
 });
 
@@ -145,7 +145,7 @@ app.get("/content", async (req, res) => {
     const [rows, fields] = await DB.query("SELECT category, img_url, name,author, value FROM content WHERE category=? ",[req.query.id]);
     
     
-
+    res.header("Access-Control-Allow-Origin", "*");
     res.send({content:rows,title:rows2});
   });
 
@@ -164,7 +164,7 @@ app.post("/1/edit_content/start", async (req, res) => {
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[category]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [category]);
  
- 
+  res.header("Access-Control-Allow-Origin", "*");
   if (rows2.length == 0){
    
   }else{
