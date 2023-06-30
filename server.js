@@ -22,7 +22,7 @@ const s3 = new aws.S3({
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-
+app.options('*', cors()) // include before other routes
 app.post("/list/main",async (req, res) => {
   console.log(req.body)
   const selectBtn1 = req.body.selectedButton1;
@@ -253,7 +253,7 @@ app.post('/api/like', async (req, res) => {
 
 
 const uploads = multer({});
-const iconv = require('iconv-lite');
+
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   try {
     const category = req.body.category;
@@ -303,7 +303,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     });
 
     const file = req.files[0];
-    const filename = file.originalname;
+    const filename = Buffer.from(file.originalname, 'latin1').toString('utf8')
 
     const filePath = `https://udtowns3.s3.ap-northeast-2.amazonaws.com/data/${category}/${filename}`;
     const message = 
@@ -320,39 +320,6 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
 
    }
  
-  // const category = req.body.category;
-  // const description = req.body.description;
-  // const title = req.body.title;
-  // const user = req.body.user;
-  // const dir = `/home/ubuntu/source/${category}`;
-  // console.log(dir,category)
-  
-  // // 디렉토리 중복확인
-  // if (!fs.existsSync(dir)) {
-  //   fs.mkdirSync(dir);
-  // }
-  
-  // // �뜝�럥�냱�뜝�럩逾� �뜝�룞�삕�뜝�룞�삕占쎌궋
-  // for (let i = 0; i < req.files.length; i++) {
-  //   const file = req.files[i];
-  //   const filename = file.originalname;
-  //   const filePath = `${dir}/${filename}`;
-  //   const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-  //   const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
-  //   const [rows, fields] = await DB.query(sql, values);
-  //   fs.writeFileSync(filePath, file.buffer);
-  // }
-  // const file = req.files[0];
-  // const filename = file.originalname;
-  // const Path2 = 'http://43.201.68.150:3001/source/'
-  // const filePath = `${Path2}/${category}/${filename}`;
-  // // DB�뜝�럥�뱺 �뜝�럥�몥�뜝�럩逾졾뜝�럡�댉 �뜝�럡�븳�뜝�럩肉�
-  // const sql = "INSERT INTO category (link, description, category, name, title, img_url, creator, created_at, unit, likecount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-  // const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0];
-  // const [rows, fields] = await DB.query(sql, values);
-
-  // console.log(rows);
-  // res.send();
 });
 
   
