@@ -21,7 +21,7 @@ const s3 = new aws.S3({
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({origin: "https://udtown.site",}));
 
 app.post("/list/main",async (req, res) => {
   console.log(req.body)
