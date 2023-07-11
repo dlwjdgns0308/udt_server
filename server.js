@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const port = 80; 
+
+
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const DB = require("./db");
@@ -10,8 +12,14 @@ const multer = require('multer');
 const { error } = require("console");
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
+const { emitWarning } = require("process");
 require('dotenv').config();
 
+const options = {
+  key: fs.readFileSync('/home/ubuntu/ssl/cert.key'),
+  cert: fs.readFileSync('/home/ubuntu/ssl/cert.key'), 
+
+};
 const s3 = new aws.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
