@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3001; 
+const port = 80; 
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const DB = require("./db");
@@ -21,7 +21,7 @@ const s3 = new aws.S3({
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({origin: "https://udtown.site",}));
+app.use(cors());
 
 app.post("/list/main",async (req, res) => {
   console.log(req.body)
