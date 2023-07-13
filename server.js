@@ -343,18 +343,18 @@ app.post('/2/cancel_content',  async (req, res) => {
   const img = req.body.img_url;
   const name = req.body.name;
   const category = req.body.category;
-  // const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
-  // const deleteParams = {
-  //   Bucket: 'udtowns3',
-  //   Key: "/data/"+ category+ "/" + name,
-  // };
-  // s3.deleteObject(deleteParams, async (err, data) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return res.status(500).json({ error: 'Failed to delete files in folder' });
-  //   }
-  // });
-  res.send('Data received');
+  const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
+  const deleteParams = {
+    Bucket: 'udtowns3',
+    Key: "/data/"+ category+ "/" + name
+  };
+  s3.deleteObject(deleteParams, async (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Failed to delete files in folder' });
+    }
+  });
+
 });
 
 
