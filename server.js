@@ -350,9 +350,12 @@ app.post('/2/cancel_content',  async (req, res) => {
   };
   
   try {
-    const data = await s3.deleteObject(deleteParams).promise();
-    console.log('File deleted successfully:', data);
-    // 파일 삭제 성공 시에 실행할 코드
+    s3.getObject(deleteParams, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        console.log('Object content:', data.Body.toString());
+      }});
   } catch (err) {
     console.log('Failed to delete file:', err);
     return res.status(500).json({ error: 'Failed to delete file' });
