@@ -346,7 +346,7 @@ app.post('/2/cancel_content',  async (req, res) => {
     Bucket: 'udtowns3',
     Key: "/data/"+ category+ "/" + name,
   };
-  s3.deleteObject(deleteParams, (err, data) => {
+  s3.deleteObject(deleteParams, async (err, data) => {
     if (err) {
       console.log(err);
       return res.status(500).json({ error: 'Failed to delete files in folder' });
