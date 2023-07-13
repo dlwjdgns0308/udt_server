@@ -15,11 +15,6 @@ const multerS3 = require('multer-s3');
 const { emitWarning } = require("process");
 require('dotenv').config();
 
-const options = {
-  key: fs.readFileSync('/home/ubuntu/ssl/cert.key'),
-  cert: fs.readFileSync('/home/ubuntu/ssl/cert.key'), 
-
-};
 const s3 = new aws.S3({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -296,7 +291,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
           const imageUrl = data.Location +filename;
           try {
             await s3.upload(uploadParams).promise();
-               // // MySQL에 이미지 URL 저장
+              // MySQL에 이미지 URL 저장
             const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
             const values = [`${category}`, imageUrl, filename, null,"0"];
             const [rows, fields] = await DB.query(sql, values);
@@ -335,6 +330,7 @@ app.get("/2/edit_content", async (req, res) => {
   console.log(req.query.id);
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [req.query.id]);
+  
   res.send({content:rows,title:rows2});
 });
 
@@ -343,7 +339,19 @@ app.get("/2/edit_content", async (req, res) => {
 const upload = multer({ });
 app.post('/2/cancel_content',  async (req, res) => {
   const img = req.body.img_url;
+  const name = req.body.name;
+  const category = req.body.category;
   const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
+  const deleteParams = {
+    Bucket: 'udtowns3',
+    Key: "/data/"+ category+ "/" + name,
+  };
+  s3.deleteObject(deleteParams, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Failed to delete files in folder' });
+    }
+  });
   res.send('Data received');
 });
 
@@ -351,6 +359,7 @@ app.post('/2/cancel_content',  async (req, res) => {
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
     const category = req.body.category;
+   
     const datas = JSON.parse(req.body.data);
     const message = req.body.message; 
     const level = req.body.level; 
