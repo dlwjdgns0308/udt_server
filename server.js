@@ -85,6 +85,7 @@ app.post("/lank",async (req, res) => {
 
 
 app.post("/list/mypage",async (req, res) => {
+  console.log("sss")
   const user = req.body.session.user.email;
   console.log(user)
   const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
