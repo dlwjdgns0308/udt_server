@@ -345,15 +345,18 @@ app.post('/2/cancel_content',  async (req, res) => {
   const category = req.body.category;
   const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
   const deleteParams = {
-    Bucket: 'udtowns3/data/UOso3h',
-    Key: "5.png"
+    Bucket: 'udtowns3',
+    Key: 'data/UOso3h/5.png'
   };
-  await s3.deleteObject(deleteParams, async (err, data) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ error: 'Failed to delete files in folder' });
-    }
-  });
+  
+  try {
+    const data = await s3.deleteObject(deleteParams).promise();
+    console.log('File deleted successfully:', data);
+    // 파일 삭제 성공 시에 실행할 코드
+  } catch (err) {
+    console.log('Failed to delete file:', err);
+    return res.status(500).json({ error: 'Failed to delete file' });
+  }
 
 });
 
