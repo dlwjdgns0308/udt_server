@@ -99,9 +99,21 @@ app.post("/list/mypagedel",async (req, res) => {
   const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
   const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
   const dir = `/home/ubuntu/source/${category}`;
-
-  if (fs.existsSync(dir)) {
-    fs.rmdirSync(dir, { recursive: true });
+  const deleteParams = {
+    Bucket: 'udtowns3',
+    Key: `data/${category}`
+  };
+  
+  try {
+    s3.deleteObject(deleteParams, (err, data) => {
+      if (err) {
+        console.log(err, err.stack);
+      } else {
+        
+      }});
+  } catch (err) {
+    console.log('Failed to delete file:', err);
+    return res.status(500).json({ error: 'Failed to delete file' });
   }
   res.status(200).send();
 });
