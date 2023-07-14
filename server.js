@@ -99,9 +99,10 @@ app.post("/list/mypagedel",async (req, res) => {
   const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
   const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
   
+  const deleteFolder = async (bucketName, folderPath) => {
     const listParams = {
-      Bucket: "udtowns3",
-      Prefix: `data/${category}`
+      Bucket: bucketName,
+      Prefix: folderPath
     };
   
     try {
@@ -112,9 +113,9 @@ app.post("/list/mypagedel",async (req, res) => {
       }
   
       const deleteParams = {
-        Bucket: 'udtowns3',
+        Bucket: bucketName,
         Delete: {
-          Objects: data.Contents.map(),
+          Objects: data.Contents.map(obj => ({ Key: obj.Key })),
           Quiet: false
         }
       };
@@ -124,6 +125,14 @@ app.post("/list/mypagedel",async (req, res) => {
     } catch (err) {
       console.log('Failed to delete folder:', err);
     }
+  };
+  
+  // 사용 예시
+  const bucketName = 'udtown3'; // 버킷 이름
+  const folderPath = `data/${category}/`; // 삭제할 폴더 경로 (마지막에 슬래시를 포함해야 함)
+  
+  deleteFolder(bucketName, folderPath);
+  
   
   
 
