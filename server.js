@@ -344,23 +344,23 @@ app.post('/2/cancel_content',  async (req, res) => {
   const name = req.body.item.name;
   const category = req.body.category;
   console.log(req.body.item.img_url)
-  const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
-  const deleteParams = {
-    Bucket: 'udtowns3',
-    Key: `data/${category}/${name}`
-  };
+  // const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
+  // const deleteParams = {
+  //   Bucket: 'udtowns3',
+  //   Key: `data/${category}/${name}`
+  // };
   
-  try {
-    s3.deleteObject(deleteParams, (err, data) => {
-      if (err) {
-        console.log(err, err.stack);
-      } else {
+  // try {
+  //   s3.deleteObject(deleteParams, (err, data) => {
+  //     if (err) {
+  //       console.log(err, err.stack);
+  //     } else {
         
-      }});
-  } catch (err) {
-    console.log('Failed to delete file:', err);
-    return res.status(500).json({ error: 'Failed to delete file' });
-  }
+  //     }});
+  // } catch (err) {
+  //   console.log('Failed to delete file:', err);
+  //   return res.status(500).json({ error: 'Failed to delete file' });
+  // }
 
 });
 
