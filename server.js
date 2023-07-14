@@ -98,23 +98,35 @@ app.post("/list/mypagedel",async (req, res) => {
   // const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
   const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
   const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
-  const dir = `/home/ubuntu/source/${category}`;
-  const deleteParams = {
-    Bucket: 'udtowns3',
-    Key: `data/${category}`
-  };
   
-  try {
-    s3.deleteObject(deleteParams, (err, data) => {
-      if (err) {
-        console.log(err, err.stack);
-      } else {
-        
-      }});
-  } catch (err) {
-    console.log('Failed to delete file:', err);
-    return res.status(500).json({ error: 'Failed to delete file' });
-  }
+    const listParams = {
+      Bucket: "udtowns3",
+      Prefix: `data/${category}`
+    };
+  
+    try {
+      const data = await s3.listObjectsV2(listParams).promise();
+      if (data.Contents.length === 0) {
+        console.log('Folder is empty.');
+        return;
+      }
+  
+      const deleteParams = {
+        Bucket: 'udtowns3',
+        Delete: {
+          Objects: data.Contents.map(),
+          Quiet: false
+        }
+      };
+  
+      const deleteResult = await s3.deleteObjects(deleteParams).promise();
+      console.log('Folder deleted successfully:', deleteResult);
+    } catch (err) {
+      console.log('Failed to delete folder:', err);
+    }
+  
+  
+
   res.status(200).send();
 });
 
