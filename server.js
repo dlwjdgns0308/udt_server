@@ -361,7 +361,7 @@ app.post('/2/cancel_content',  async (req, res) => {
   //   console.log('Failed to delete file:', err);
   //   return res.status(500).json({ error: 'Failed to delete file' });
   // }
-
+  res.status(200);
 });
 
 
