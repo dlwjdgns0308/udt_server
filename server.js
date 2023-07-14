@@ -346,11 +346,11 @@ app.post('/2/cancel_content',  async (req, res) => {
   const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
   const deleteParams = {
     Bucket: 'udtowns3',
-    Key: 'data/UOso3h/5.png'
+    Key: `data/${category}/${name}`
   };
   
   try {
-    s3.getObject(deleteParams, (err, data) => {
+    s3.deleteObject(deleteParams, (err, data) => {
       if (err) {
         console.log(err, err.stack);
       } else {
