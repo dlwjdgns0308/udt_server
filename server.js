@@ -128,9 +128,9 @@ app.post("/list/mypagedel",async (req, res) => {
   };
   
   // 사용 예시
-  const bucketName = 'udtown3'; // 버킷 이름
+  const bucketName = 'udtowns3'; // 버킷 이름
   const folderPath = `data/${category}/`; // 삭제할 폴더 경로 (마지막에 슬래시를 포함해야 함)
-  
+  console.log(folderPath)
   deleteFolder(bucketName, folderPath);
   
   
