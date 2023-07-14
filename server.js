@@ -354,7 +354,7 @@ app.post('/2/cancel_content',  async (req, res) => {
       if (err) {
         console.log(err, err.stack);
       } else {
-        console.log('Object content:', data.Body.toString());
+        
       }});
   } catch (err) {
     console.log('Failed to delete file:', err);
