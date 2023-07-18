@@ -98,11 +98,44 @@ app.post("/list/mypagedel",async (req, res) => {
   // const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
   const [rows, fields] = await DB.query("DELETE FROM content WHERE category = ? ",[category]);
   const [rows2, fields2] = await DB.query("DELETE FROM category WHERE category = ? ",[category]);
-  const dir = `/home/ubuntu/source/${category}`;
+  
+  const deleteFolder = async (bucketName, folderPath) => {
+    const listParams = {
+      Bucket: bucketName,
+      Prefix: folderPath
+    };
+  
+    try {
+      const data = await s3.listObjectsV2(listParams).promise();
+      if (data.Contents.length === 0) {
+        console.log('Folder is empty.');
+        return;
+      }
+  
+      const deleteParams = {
+        Bucket: bucketName,
+        Delete: {
+          Objects: data.Contents.map(obj => ({ Key: obj.Key })),
+          Quiet: false
+        }
+      };
+  
+      const deleteResult = await s3.deleteObjects(deleteParams).promise();
+      console.log('Folder deleted successfully:', deleteResult);
+    } catch (err) {
+      console.log('Failed to delete folder:', err);
+    }
+  };
+  
+  // 사용 예시
+  const bucketName = 'udtowns3'; // 버킷 이름
+  const folderPath = `data/${category}/`; // 삭제할 폴더 경로 (마지막에 슬래시를 포함해야 함)
+  console.log(folderPath)
+  deleteFolder(bucketName, folderPath);
+  
+  
+  
 
-  if (fs.existsSync(dir)) {
-    fs.rmdirSync(dir, { recursive: true });
-  }
   res.status(200).send();
 });
 
@@ -342,10 +375,10 @@ app.get("/2/edit_content", async (req, res) => {
 
 const upload = multer({ });
 app.post('/2/cancel_content',  async (req, res) => {
-  const img = req.body.item.img_url;
-  const name = req.body.item.name;
-  const category = req.body.category;
-  console.log(req.body)
+  const img = req.body.category.item.img_url
+  const name = req.body.category.item.name;
+  const category = req.body.category.category;
+  console.log()
   const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
   const deleteParams = {
     Bucket: 'udtowns3',
@@ -363,7 +396,7 @@ app.post('/2/cancel_content',  async (req, res) => {
     console.log('Failed to delete file:', err);
     return res.status(500).json({ error: 'Failed to delete file' });
   }
-
+  res.status(200);
 });
 
 
