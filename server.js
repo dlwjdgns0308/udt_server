@@ -427,7 +427,7 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     const level = req.body.level; 
     const unit = req.body.unit; 
     const sql2 = 'UPDATE category SET message = ?, level = ?, unit= ?, name = ? WHERE category = ?;';
-    const values2 = [message,level,unit,category,datas[0].name];
+    const values2 = [message,level,unit,datas[0].name,category];
     const [rows2, fields2] = await DB.query(sql2, values2);
     datas.forEach(async data => {
       // console.log(data);
