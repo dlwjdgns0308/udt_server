@@ -295,7 +295,9 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
             await s3.upload(uploadParams).promise();
               // MySQL에 이미지 URL 저장
             const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-            const values = [`${category}`, imageUrl, filename, null,"0"];
+            const real = filename.replace(".jpg","");
+            real = filename.replace(".png","");
+            const values = [`${category}`, imageUrl, real, null,"0"];
             const [rows, fields] = await DB.query(sql, values);
             console.log(`${filename} 업로드 완료`);
           } catch (error) {
@@ -367,8 +369,9 @@ app.post('/2/cancel_content',  async (req, res) => {
 
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
+    console.log(req.body);
     const category = req.body.category;
-   
+    
     const datas = JSON.parse(req.body.data);
     const message = req.body.message; 
     const level = req.body.level; 
@@ -386,8 +389,7 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     
     const dir = `/home/ubuntu/source/${category}`;
     // console.log(req.body);
-    console.log(req)
-
+  
  
     // const name = req.body.name;
     // const filePath = `${dir}/${name}`;
