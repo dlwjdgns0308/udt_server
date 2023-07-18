@@ -84,7 +84,7 @@ app.post("/lank",async (req, res) => {
   const [rows2,fields2] = await DB.query(query);
   
   
-  res.send(rows,rows2);
+  res.send({content:rows,comment:rows2});
 });
 
 
