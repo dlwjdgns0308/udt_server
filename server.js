@@ -292,6 +292,14 @@ app.post('/api/like', async (req, res) => {
 
 const uploads = multer({});
 
+const upimg = multer({});
+app.post('/2/edit_image', uploads.single('imaged'), async (req, res) => {
+  try{
+    console.log(req.body)
+  }catch(error){
+
+  }
+});
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   try {
     const category = req.body.category;
@@ -323,7 +331,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
             Key: folderName + filename,
             Body: file.buffer,
           };
-          const imageUrl = data.Location +filename;
+          const imageUrl = data.Location + filename;
           try {
             await s3.upload(uploadParams).promise();
               // MySQL에 이미지 URL 저장
@@ -409,8 +417,8 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     const message = req.body.message; 
     const level = req.body.level; 
     const unit = req.body.unit; 
-    const sql2 = 'UPDATE category SET message = ?, level = ?, unit= ? WHERE category = ?;';
-    const values2 = [message,level,unit,category];
+    const sql2 = 'UPDATE category SET message = ?, level = ?, unit= ?, name = ? WHERE category = ?;';
+    const values2 = [message,level,unit,category,datas[0].name];
     const [rows2, fields2] = await DB.query(sql2, values2);
     datas.forEach(async data => {
       // console.log(data);
@@ -421,25 +429,7 @@ app.post('/2/edit_content', upload.array('image'), async (req, res) => {
     
     
     const dir = `/home/ubuntu/source/${category}`;
-    // console.log(req.body);
-  
- 
-    // const name = req.body.name;
-    // const filePath = `${dir}/${name}`;
-    // console.log(filePath)
-    // fs.writeFileSync(filePath, req.file.buffer);
 
-    for (let i = 0; i < req.files.length; i++) {
-      // const file = req.files[i];
-      // const name = req.body.name[i];
-      // const filePath = `${dir}/${name}`;
-      // // �뜝�럥�빢�뜝�럩�젧占쎈쐩占쎈닑占쎈뉴 �뜝�럡�맜�뼨��먯삕
-      const sql = 'UPDATE content SET name = ?, age = ? WHERE id = ?;';
-      // const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-      // const values = [`${category}`, `http://43.201.68.150:3001/source/${category}/${filename}`, filename, null,"0"];
-      // const [rows, fields] = await DB.query(sql, values);
-      // fs.writeFileSync(filePath, file.buffer);
-    }
    
     res.status(200).send({ messege :'sucess' });
   } catch (error) {
