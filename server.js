@@ -293,7 +293,7 @@ app.post('/api/like', async (req, res) => {
 const uploads = multer({});
 
 const upimg = multer({});
-app.post('/2/edit_image', uploads.single('imaged'), async (req, res) => {
+app.post('/2/edit_image', upimg.single('imaged'), async (req, res) => {
   try{
     console.log(req.body)
     const category = req.body.category;
@@ -303,7 +303,8 @@ app.post('/2/edit_image', uploads.single('imaged'), async (req, res) => {
       Key: `data/${category}/${filename}`, // 폴더 이름을 포함한 객체 키
       Body: req.file.buffer, // 폴더를 만들기 위해 빈 본문 사용
     };
-    await s3.upload(uploadParams).promise();
+   
+    await s3.upload(params).promise();
   }catch(error){
 
   }
