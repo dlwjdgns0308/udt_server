@@ -378,7 +378,7 @@ app.post('/2/cancel_content',  async (req, res) => {
   const img = req.body.category.item.img_url
   const name = req.body.category.item.name;
   const category = req.body.category.category;
-  console.log()
+ 
   const [rows, fields] = await DB.query("DELETE FROM content WHERE img_url = ? ",[img]);
   const deleteParams = {
     Bucket: 'udtowns3',
