@@ -296,6 +296,14 @@ const upimg = multer({});
 app.post('/2/edit_image', uploads.single('imaged'), async (req, res) => {
   try{
     console.log(req.body)
+    const category = req.body.category;
+    const filename = req.body.filename
+    const params = {
+      Bucket: 'udtowns3',
+      Key: `data/${category}/${filename}`, // 폴더 이름을 포함한 객체 키
+      Body: req.file.buffer, // 폴더를 만들기 위해 빈 본문 사용
+    };
+    await s3.upload(uploadParams).promise();
   }catch(error){
 
   }
@@ -307,7 +315,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const title = req.body.title;
     const user = req.body.user;
     const folderName = `data/${category}/`;
-
+    
     const params = {
       Bucket: 'udtowns3',
       Key: folderName, // 폴더 이름을 포함한 객체 키
