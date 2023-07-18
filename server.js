@@ -345,7 +345,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
             await s3.upload(uploadParams).promise();
               // MySQL에 이미지 URL 저장
             const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
-            const values = [`${category}`, imageUrl, real, null,"0"];
+            const values = [`${category}`, imageUrl, filename, null,"0"];
             const [rows, fields] = await DB.query(sql, values);
             console.log(`${filename} 업로드 완료`);
           } catch (error) {
