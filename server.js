@@ -88,6 +88,29 @@ app.post("/lank",async (req, res) => {
 });
 
 
+app.post("/comment",async (req, res) => {
+  const category = req.body;
+  console.log(category);
+  let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ";
+  if(category != 'all'){
+    query += `WHERE category = '${category}'`;
+    
+  }
+  query += "ORDER BY score DESC";
+  const [rows,fields] = await DB.query(query);
+
+  let query2 = "SELECT  comment, user, created_at  FROM comment ";
+  if(category != 'all'){
+    query2 += `WHERE category = '${category}'`;
+    
+  }
+ 
+  const [rows2,fields2] = await DB.query(query2);
+  
+  
+  res.send({content:rows,comment:rows2});
+});
+
 
 
 app.post("/list/mypage",async (req, res) => {
