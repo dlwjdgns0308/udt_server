@@ -97,8 +97,7 @@ app.post("/comment",async (req, res) => {
     const comment = req.body.comment;
 
     console.log(category);
-    let query = "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)"[category,user,name,comment,datetime];
-    const [rows,fields] = await DB.query(query);
+    const [rows,fields] = await DB.query( "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)",[category,user,name,comment,datetime]);
   
  
     res.status(200).send();
