@@ -21,7 +21,8 @@ const s3 = new aws.S3({
   region: process.env.S3_REGION
 });
 // AWS 계정 자격 증명 설정
-
+const date = new Date();
+const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -94,9 +95,9 @@ app.post("/comment",async (req, res) => {
     const user = req.body.session.user.email;
     const name = req.body.session.user.name;
     const comment = req.body.comment;
-    const created_at = req.body.session.user.expires;
+
     console.log(category);
-    let query = "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)"[category,user,name,comment,created_at];
+    let query = "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)"[category,user,name,comment,datetime];
     const [rows,fields] = await DB.query(query);
   
  
@@ -217,8 +218,7 @@ app.get("/content", async (req, res) => {
 
 
 
-const date = new Date();
-const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
+
 const creator = undefined;
 let likecount = undefined;
 
