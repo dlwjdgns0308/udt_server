@@ -112,7 +112,17 @@ app.post("/comment",async (req, res) => {
 
 
 app.post("/delcomment",async (req, res) => {
-  console.log(req.body)
+  if(req.body.session != null){
+    const category = req.body.category;
+    const user = req.body.session.user.email;
+    const comment = req.body.comment;
+    const [rows, fields] = await DB.query("DELETE FROM comment WHERE category = ? AND comment = ? AND user = ?",[category,comment,user]);
+ 
+    res.status(200).send();
+  }else{
+    res.status(201).send();
+  }
+
 
   
   
