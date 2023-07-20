@@ -76,7 +76,7 @@ app.post("/lank",async (req, res) => {
   query += "ORDER BY score DESC";
   const [rows,fields] = await DB.query(query);
 
-  let query2 = "SELECT  comment, user, created_at  FROM comment ";
+  let query2 = "SELECT  comment, name, created_at  FROM comment ORDER BY created_at DESC ";
   if(category != 'all'){
     query2 += `WHERE category = '${category}'`;
     
@@ -96,7 +96,7 @@ app.post("/comment",async (req, res) => {
     const name = req.body.session.user.name;
     const comment = req.body.comment;
 
-    console.log(category);
+    console.log(datetime);
     const [rows,fields] = await DB.query( "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)",[category,user,name,comment,datetime]);
   
  
