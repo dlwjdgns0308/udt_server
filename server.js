@@ -21,8 +21,7 @@ const s3 = new aws.S3({
   region: process.env.S3_REGION
 });
 // AWS 계정 자격 증명 설정
-const date = new Date();
-const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -95,7 +94,8 @@ app.post("/comment",async (req, res) => {
     const user = req.body.session.user.email;
     const name = req.body.session.user.name;
     const comment = req.body.comment;
-
+    const date = new Date();
+    const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
     console.log(datetime);
     const [rows,fields] = await DB.query( "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)",[category,user,name,comment,datetime]);
   
@@ -386,7 +386,8 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
 
     const file = req.files[0];
     const filename = Buffer.from(file.originalname, 'latin1').toString('utf8')
-
+    const date = new Date();
+    const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
     const filePath = `https://udtowns3.s3.ap-northeast-2.amazonaws.com/data/${category}/${filename}`;
     const message = 
     "잘못 클릭하신거죠? 다시 한 번 도전해보세요!,이번 레벨은 좀 까다로웠나봐요. 하지만 다음에는 더 재밌는 도전이 준비되어 있을 거에요.,오늘은 운이 별로 없었나봐요. 다음에는 좀 더 운이 좋기를 빌어드려요!,초보자가 아니시군요! 더 어려운 목표를 향해 나아가보세요.,이번에도 멋진 결과를 이루셨습니다. 하지만 이제부터는 더 큰 도전이 기다리고 있답니다.,이미 경험이 많으신 분이시니 이젠 더욱 더 대단한 결과를 이루셔도 됩니다. 우리가 기대할게요!,이번 실패는 다음에는 꼭 성공할 자신을 키워줄 거에요. 조금만 더 노력하면 됩니다!,숙련자급이시군요. 이젠 더 어려운 도전도 전혀 무섭지 않겠죠?,이미 최고에 도달하셨습니다! 이제는 더 자유롭게 도전해보세요. 당신의 재능을 보여주세요!,이번 결과는 역대급입니다! 당신이 이 게임의 전설이 될 거에요.";
