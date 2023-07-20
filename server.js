@@ -89,8 +89,18 @@ app.post("/lank",async (req, res) => {
 
 
 app.post("/comment",async (req, res) => {
-  const category = req.body;
-  console.log(category);
+  if(req.body.session != null){
+    const category = req.body.category;
+    const user = req.body.session.user.email;
+    const name = req.body.session.user.name;
+    const comment = req.body.comment;
+    const created_at = req.body.session.user.expires;
+    console.log(category);
+    res.status(200).send();
+  }else{
+    res.status(201).send();
+  }
+
   // let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ";
   // if(category != 'all'){
   //   query += `WHERE category = '${category}'`;
