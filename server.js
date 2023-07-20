@@ -96,29 +96,18 @@ app.post("/comment",async (req, res) => {
     const comment = req.body.comment;
     const created_at = req.body.session.user.expires;
     console.log(category);
+    let query = "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)"[category,user,name,comment,created_at];
+    const [rows,fields] = await DB.query(query);
+  
+ 
     res.status(200).send();
   }else{
     res.status(201).send();
   }
 
-  // let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ";
-  // if(category != 'all'){
-  //   query += `WHERE category = '${category}'`;
-    
-  // }
-  // query += "ORDER BY score DESC";
-  // const [rows,fields] = await DB.query(query);
 
-  // let query2 = "SELECT  comment, user, created_at  FROM comment ";
-  // if(category != 'all'){
-  //   query2 += `WHERE category = '${category}'`;
-    
-  // }
- 
-  // const [rows2,fields2] = await DB.query(query2);
   
   
-  // res.send({content:rows,comment:rows2});
 });
 
 
