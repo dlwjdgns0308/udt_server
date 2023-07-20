@@ -111,6 +111,15 @@ app.post("/comment",async (req, res) => {
 });
 
 
+app.post("/delcomment",async (req, res) => {
+  console.log(req.body)
+
+  
+  
+});
+
+
+
 
 app.post("/list/mypage",async (req, res) => {
   console.log("sss")
