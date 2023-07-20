@@ -75,12 +75,12 @@ app.post("/lank",async (req, res) => {
   query += "ORDER BY score DESC";
   const [rows,fields] = await DB.query(query);
 
-  let query2 = "SELECT  comment, name, created_at  FROM comment ORDER BY created_at DESC ";
+  let query2 = "SELECT  comment, name, created_at  FROM comment ";
   if(category != 'all'){
     query2 += `WHERE category = '${category}'`;
     
   }
- 
+  query2 += "ORDER BY created_at DESC";
   const [rows2,fields2] = await DB.query(query2);
   
   
