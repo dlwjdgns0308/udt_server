@@ -89,7 +89,7 @@ app.post("/lank",async (req, res) => {
 
 
 app.post("/comment",async (req, res) => {
-  const category = req;
+  const category = req.body;
   console.log(category);
   // let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ";
   // if(category != 'all'){
