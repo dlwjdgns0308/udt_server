@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post("/list/main",async (req, res) => {
-  console.log(req.body)
+
   const selectBtn1 = req.body.selectedButton1;
   const selectBtn2 = req.body.selectedButton2;
   const search = req.body.search;
@@ -66,7 +66,7 @@ const [rows,fields] = await DB.query(`SELECT * FROM category WHERE title LIKE '%
 });
 app.post("/lank",async (req, res) => {
   const category = req.body.id;
-  console.log(category);
+
   let query = "SELECT  category, image, name, level,levelname, score, title  FROM lanking ";
   if(category != 'all'){
     query += `WHERE category = '${category}'`;
@@ -96,7 +96,7 @@ app.post("/comment",async (req, res) => {
     const comment = req.body.comment;
     const date = new Date();
     const datetime = date.toISOString().slice(0, 19).replace('T', ' ');
-    console.log(datetime);
+   
     const [rows,fields] = await DB.query( "INSERT INTO comment (category,user,name,comment,created_at) VALUES (?, ?, ?, ?, ?)",[category,user,name,comment,datetime]);
   
  
@@ -132,9 +132,9 @@ app.post("/delcomment",async (req, res) => {
 
 
 app.post("/list/mypage",async (req, res) => {
-  console.log("sss")
+
   const user = req.body.session.user.email;
-  console.log(user)
+
   const [rows,fields] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount FROM category WHERE creator = ?",[user]);
   
   res.send(rows);
@@ -177,7 +177,7 @@ app.post("/list/mypagedel",async (req, res) => {
   // 사용 예시
   const bucketName = 'udtowns3'; // 버킷 이름
   const folderPath = `data/${category}/`; // 삭제할 폴더 경로 (마지막에 슬래시를 포함해야 함)
-  console.log(folderPath)
+
   deleteFolder(bucketName, folderPath);
   
   
@@ -189,7 +189,7 @@ app.post("/list/mypagedel",async (req, res) => {
 
 
 app.post("/gameover",async (req, res) => {
-  console.log(req.body);
+
   const name = req.body.session.name;
   const email = req.body.session.email;
   const level = req.body.progressBarLevel;
@@ -200,7 +200,7 @@ app.post("/gameover",async (req, res) => {
   const image = req.body.session.image;
   const [rows,fields] = await DB.query("SELECT  title FROM category WHERE category=? ",[category]);
   const title = rows[0].title;
-  console.log(rows)
+  
   const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
   if(rows2.length > 1){
     top = rows2[0].score;
@@ -254,7 +254,7 @@ app.post("/1/edit_content/start", async (req, res) => {
   }else{
     creator = rows2[0].creator;
   }
-  console.log(user, category,  creator)
+ 
   if( creator == undefined){
     //占쎄퉱嚥≪뮇�뒲 ��뚢뫂��쀯㎘占�
     res.status(200).send();
@@ -263,7 +263,7 @@ app.post("/1/edit_content/start", async (req, res) => {
     res.status(201).send({content:rows,title:rows2});
   }else{
     //占쎈뼄�몴紐꾩��占쏙옙占�
-    console.log("fsfsdfdsfds")
+
     res.status(300).send();
   }
  
@@ -276,13 +276,13 @@ app.post("/content/start", async (req, res) => {
   const category = req.body.category;
   const uca =  user + category; 
   const [rows, fields] = await DB.query("SELECT user, category, uca FROM likecount WHERE uca=?", [uca]);
-  console.log(rows[0]);
+
  
  
   if (rows.length == 0){
     likecount = undefined;
   }else{
-    console.log(rows[0].user);
+
     likecount = rows[0].user;
   }
 
@@ -294,7 +294,7 @@ app.post("/content/start", async (req, res) => {
     res.status(201).send();
   }else{
     //
-    console.log("fsfsdfdsfds")
+
     res.status(300).send();
   }
  
@@ -341,7 +341,7 @@ const uploads = multer({});
 const upimg = multer({});
 app.post('/2/edit_image', upimg.single('imaged'), async (req, res) => {
   try{
-    console.log(req.body)
+
     const category = req.body.category;
     const filename = req.body.filename
     const params = {
@@ -393,9 +393,9 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
             const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
             const values = [`${category}`, imageUrl, filename, null,"0"];
             const [rows, fields] = await DB.query(sql, values);
-            console.log(`${filename} 업로드 완료`);
+          
           } catch (error) {
-            console.error(`${filename} 업로드 실패:`, error);
+            
           }
         }
 
@@ -416,7 +416,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
     const values = [`./content/${category}`, description, category,  file.originalname, title, filePath , user,datetime, '원', 0,message, level];
     const [rows, fields] = await DB.query(sql, values);
 
-    console.log(rows);
+   
  
    }catch(error){
 
@@ -426,7 +426,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
 
   
 app.get("/2/edit_content", async (req, res) => {
-  console.log(req.query.id);
+
   const [rows2,fields2] = await DB.query("SELECT  link,description,category,name,title,img_url,creator,created_at,unit,likecount,message,level FROM category WHERE category=? ",[req.query.id]);
   const [rows, fields] = await DB.query("SELECT category, img_url, name, author, value FROM content WHERE category=?", [req.query.id]);
   
@@ -450,7 +450,7 @@ app.post('/2/cancel_content',  async (req, res) => {
   try {
     s3.deleteObject(deleteParams, (err, data) => {
       if (err) {
-        console.log(err, err.stack);
+ 
       } else {
         
       }});
@@ -464,7 +464,7 @@ app.post('/2/cancel_content',  async (req, res) => {
 
 app.post('/2/edit_content', upload.array('image'), async (req, res) => {
   try {
-    console.log(req.body);
+
     const category = req.body.category;
     
     const datas = JSON.parse(req.body.data);
