@@ -198,23 +198,24 @@ app.post("/gameover",async (req, res) => {
   const top = 0;
   const category = req.body.category;
   const image = req.body.session.image;
-  const [rows,fields] = await DB.query("SELECT  title FROM category WHERE category=? ",[category]);
-  const title = rows[0].title;
-  
-  const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
-  if(rows2.length > 1){
-    top = rows2[0].score;
-  }
-  if(score > top){
-    // 기존 랭킹 제거
-    const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE category = ? AND email=? ",[category,email]);
-    // 랭킹 정보 추가
-    const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image, email, title) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email, title]);
+  if(email.length > 5){
+    const [rows,fields] = await DB.query("SELECT  title FROM category WHERE category=? ",[category]);
+    const title = rows[0].title;
+    
+    const [rows2,fields2] = await DB.query("SELECT  score FROM lanking WHERE email=? AND category=? ",[email,category]);
+    if(rows2.length > 1){
+      top = rows2[0].score;
+    }
+    if(score > top){
+      // 기존 랭킹 제거
+      const [rows2, fields2] = await DB.query("DELETE FROM lanking WHERE category = ? AND email=? ",[category,email]);
+      // 랭킹 정보 추가
+      const [rows, fields] = await DB.query("INSERT INTO lanking (name, level, levelname, score, category, image, email, title) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ", [name, level, levelname, score, category, image, email, title]);
 
-  
+    
+    }
+ 
   }
- 
- 
 
   res.status(200).send();
 });
