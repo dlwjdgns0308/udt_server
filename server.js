@@ -408,7 +408,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
             Key: folderName + filename,
             Body: file.buffer,
           };
-          const imageUrl = data.Location + filename;
+          const imageUrl = `https://udtowns3.s3.ap-northeast-2.amazonaws.com/data/${category}/${filename}`;
           try {
             await s3.upload(uploadParams).promise();
               // MySQL에 이미지 URL 저장
