@@ -367,7 +367,7 @@ app.post('/2/add_image', upimg.single('imaged'), async (req, res) => {
       Key: `data/${category}/${filename}`, // 폴더 이름을 포함한 객체 키
       Body: req.file.buffer, // 폴더를 만들기 위해 빈 본문 사용
     };
-    const imageUrl = data.Location + filename;
+    const imageUrl = `https://udtowns3.s3.ap-northeast-2.amazonaws.com/data/${category}/${filename}`;
     await s3.upload(params).promise();
 
     const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
@@ -408,7 +408,7 @@ app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
             Key: folderName + filename,
             Body: file.buffer,
           };
-          const imageUrl = `https://udtowns3.s3.ap-northeast-2.amazonaws.com/data/${category}/${filename}`;
+          const imageUrl = data.Location + filename;
           try {
             await s3.upload(uploadParams).promise();
               // MySQL에 이미지 URL 저장
