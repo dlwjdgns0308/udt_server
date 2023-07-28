@@ -356,6 +356,27 @@ app.post('/2/edit_image', upimg.single('imaged'), async (req, res) => {
 
   }
 });
+
+app.post('/2/add_image', upimg.single('imaged'), async (req, res) => {
+  try{
+
+    const category = req.body.category;
+    const filename = req.body.filename
+    const params = {
+      Bucket: 'udtowns3',
+      Key: `data/${category}/${filename}`, // 폴더 이름을 포함한 객체 키
+      Body: req.file.buffer, // 폴더를 만들기 위해 빈 본문 사용
+    };
+    const imageUrl = data.Location + filename;
+    await s3.upload(params).promise();
+
+    const sql = "INSERT INTO content (category, img_url, name,author, value) VALUES (?, ?, ?, ?, ?) ";
+    const values = [`${category}`, imageUrl, filename, null,"0"];
+    const [rows, fields] = await DB.query(sql, values);
+  }catch(error){
+
+  }
+});
 app.post('/1/edit_content', uploads.array('images'), async (req, res) => {
   try {
     const category = req.body.category;
