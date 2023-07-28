@@ -359,7 +359,7 @@ app.post('/2/edit_image', upimg.single('imaged'), async (req, res) => {
 
 app.post('/2/add_image', upimg.single('imaged'), async (req, res) => {
   try{
-
+    console.log(req.body)
     const category = req.body.category;
     const filename = req.body.filename
     const params = {
